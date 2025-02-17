@@ -16,14 +16,14 @@ const Dashboard: React.FC = () => {
             setCurrentIndex((prevIndex) =>
                 prevIndex === images.length - 1 ? 0 : prevIndex + 1
             );
-        }, 3000); // Change image every 3 seconds
+        }, 5000); // Change image every 3 seconds
         return () => clearInterval(interval);
     }, [images.length]);
 
     return (
         <div className="page-container">
             <Navbar />
-            <div className="relative w-[1000px] h-[585px] overflow-hidden">
+            <div className="relative w-[1000px] h-[630px] overflow-hidden">
                 {images.map((image, index) => (
                     <img
                         key={index}

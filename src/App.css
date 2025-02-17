@@ -1,22 +1,40 @@
-.footer {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  position: relative;
-  width: 100%;
-}
+/* App.css */
 
 .image-container {
   position: relative;
-  width: 100%;
-  height: 400px; /* Adjust as needed */
+  width: 800px;
+  height: 800px; /* Adjust the height as needed */
   overflow: hidden;
 }
 
 .sliding-image {
+  position: absolute;
   width: 100%;
-  height: 100%;
+  height: 800px;
   object-fit: cover;
-  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  animation: slideInOut 9s ease-in-out infinite;
+}
+
+@keyframes slideInOut {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  40% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }

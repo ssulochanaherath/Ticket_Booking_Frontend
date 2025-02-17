@@ -37,7 +37,7 @@ function Navbar() {
                 <div className="flex items-center space-x-2">
                     <FaFilm className="text-white text-2xl" />
                     <div className="text-white text-2xl font-bold">
-                        <Link to="/">Film Hall</Link>
+                        <Link to="/dashboard">Film Hall</Link>
                     </div>
                 </div>
 

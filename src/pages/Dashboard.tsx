@@ -8,7 +8,6 @@ function Dashboard() {
         './src/assets/login.jpg',
         'path/to/image2.jpg',
         'path/to/image3.jpg',
-        // Add more images as needed
     ];
 
     // State to track the current image index

@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import loginImage from '../assets/login.jpg';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -13,6 +15,8 @@ function Login() {
         } else {
             setError('');
             console.log('Logging in with:', email, password);
+            // Navigate to the dashboard after login
+            navigate('/dashboard'); // Redirect to dashboard
         }
     };
 

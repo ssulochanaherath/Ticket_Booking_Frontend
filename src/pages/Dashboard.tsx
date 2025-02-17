@@ -1,8 +1,9 @@
 import Navbar from '../components/Navbar';
+import Footer from "../components/Footer.tsx";
 
 function Dashboard() {
     return (
-        <div>
+        <div className="page-container">
             <Navbar />
         </div>
     );

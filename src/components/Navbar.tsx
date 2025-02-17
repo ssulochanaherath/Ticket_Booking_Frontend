@@ -3,17 +3,17 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaFilm } from 'react-icons/fa';
 
 function Navbar() {
-    const [currentDate, setCurrentDate] = useState('');
-    const [currentTime, setCurrentTime] = useState('');
+    //const [currentDate, setCurrentDate] = useState('');
+    //const [currentTime, setCurrentTime] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const updateDateTime = () => {
-            const now = new Date();
-            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            setCurrentDate(now.toLocaleDateString('en-US', dateOptions));
-            setCurrentTime(now.toLocaleTimeString('en-US', timeOptions));
+            //const now = new Date();
+            //const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            //const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            //setCurrentDate(now.toLocaleDateString('en-US', dateOptions));
+            //setCurrentTime(now.toLocaleTimeString('en-US', timeOptions));
         };
 
         updateDateTime(); // Initialize with current date and time
@@ -31,7 +31,7 @@ function Navbar() {
     };
 
     return (
-        <nav className="bg-gradient-to-r from-indigo-600 to-blue-500 p-4">
+        <nav className="bg-gradient-to-r black from-gray-800 to-gray-900 p-4">
             <div className="flex justify-between items-center">
                 {/* Left side: Icon and Film Hall Name */}
                 <div className="flex items-center space-x-2">
@@ -42,13 +42,13 @@ function Navbar() {
                 </div>
 
                 {/* Center: Current Date and Time */}
-                <div className="text-white text-center">
-                    <div className="text-lg font-semibold">{currentDate}</div>
-                    <div className="text-sm">{currentTime}</div>
-                </div>
+                {/*<div className="text-white text-center">*/}
+                {/*    <div className="text-lg font-semibold">{currentDate}</div>*/}
+                {/*    <div className="text-sm">{currentTime}</div>*/}
+                {/*</div>*/}
 
                 {/* Right side: Navigation Links */}
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-14 text-lg">
                     <NavLink
                         to="/dashboard"
                         className={({ isActive }) =>
@@ -90,13 +90,15 @@ function Navbar() {
                         Schedules
                     </NavLink>
 
-                    {/* Sign Out Button */}
+
+                {/* Sign Out Button */}
                     <button
                         onClick={handleSignOut}
-                        className="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 px-4 py-2 rounded"
+                        className="text-sm text-white bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 px-6 py-2 rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105"
                     >
                         Sign Out
                     </button>
+
                 </div>
             </div>
         </nav>

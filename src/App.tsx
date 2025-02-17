@@ -10,6 +10,7 @@ function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/films" element={<Films />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
         </Router>
     );

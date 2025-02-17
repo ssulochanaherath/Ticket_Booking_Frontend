@@ -1,7 +1,35 @@
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaFilm } from 'react-icons/fa';
 
 function Navbar() {
+    const [currentDate, setCurrentDate] = useState('');
+    const [currentTime, setCurrentTime] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const updateDateTime = () => {
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            setCurrentDate(now.toLocaleDateString('en-US', dateOptions));
+            setCurrentTime(now.toLocaleTimeString('en-US', timeOptions));
+        };
+
+        updateDateTime(); // Initialize with current date and time
+        const intervalId = setInterval(updateDateTime, 1000); // Update every second
+
+        return () => clearInterval(intervalId); // Cleanup on component unmount
+    }, []);
+
+    const handleSignOut = () => {
+        // Clear authentication tokens or user data here
+        // For example: localStorage.removeItem('authToken');
+
+        // Navigate to the login page
+        navigate('/login');
+    };
+
     return (
         <nav className="bg-gradient-to-r from-indigo-600 to-blue-500 p-4">
             <div className="flex justify-between items-center">
@@ -13,8 +41,14 @@ function Navbar() {
                     </div>
                 </div>
 
+                {/* Center: Current Date and Time */}
+                <div className="text-white text-center">
+                    <div className="text-lg font-semibold">{currentDate}</div>
+                    <div className="text-sm">{currentTime}</div>
+                </div>
+
                 {/* Right side: Navigation Links */}
-                <div className="hidden md:flex space-x-6">
+                <div className="flex items-center space-x-6">
                     <NavLink
                         to="/dashboard"
                         className={({ isActive }) =>
@@ -55,25 +89,13 @@ function Navbar() {
                     >
                         Schedules
                     </NavLink>
-                </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden">
-                    <button className="text-white">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
+                    {/* Sign Out Button */}
+                    <button
+                        onClick={handleSignOut}
+                        className="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 px-4 py-2 rounded"
+                    >
+                        Sign Out
                     </button>
                 </div>
             </div>

@@ -38,3 +38,15 @@
     opacity: 0;
   }
 }
+
+/* App.css */
+.calendar-wrapper {
+  position: fixed;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px;  /* Adjust as needed */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.calendar-container {
+  margin-top: 20px;
+}

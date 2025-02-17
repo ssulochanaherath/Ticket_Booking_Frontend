@@ -1,11 +1,13 @@
+// Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import TestCalendar from '../components/TestCalendar';
 import '../App.css';
 import battleImage from '../assets/battle.jpg';
 import missionImage from '../assets/mission.jpg';
 import hobbitImage from '../assets/hobbit.jpg';
 
-function Dashboard() {
+const Dashboard: React.FC = () => {
     const images = [battleImage, missionImage, hobbitImage];
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,10 +34,12 @@ function Dashboard() {
                         }`}
                     />
                 ))}
+                <div>
+                    <TestCalendar />
+                </div>
             </div>
-            {/* Additional content for the Dashboard can go here */}
         </div>
     );
-}
+};
 
 export default Dashboard;

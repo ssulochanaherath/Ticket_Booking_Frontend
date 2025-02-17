@@ -37,6 +37,11 @@ const Dashboard: React.FC = () => {
                 <div>
                     <TestCalendar />
                 </div>
+
+                <div className="booking-button">
+                    <button className="green-booking-btn">Booking</button> {/* Added button */}
+                </div>
+
             </div>
         </div>
     );

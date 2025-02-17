@@ -43,10 +43,44 @@
 .calendar-wrapper {
   position: fixed;
   top: 80px; /* Adjust as needed */
-  right: 20px;  /* Adjust as needed */
+  right: 15px;  /* Adjust as needed */
   z-index: 1000; /* Ensure it's above other content */
 }
 
 .calendar-container {
   margin-top: 20px;
 }
+
+.react-calendar__navigation button {
+  background-color: #143D60; /* Green background */
+  color: white;
+}
+
+.green-booking-btn {
+  position: fixed;
+  right: 130px;
+  bottom: 50px;
+  padding: 12px 24px;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.green-booking-btn:hover {
+  background-color: #45a049; /* Slightly darker green on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.green-booking-btn:active {
+  background-color: #3e8e41; /* Even darker green on click */
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+

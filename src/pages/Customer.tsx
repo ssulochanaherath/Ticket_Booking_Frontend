@@ -1,6 +1,7 @@
-// src/pages/Customer.tsx
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
+import backgroundImage from '../assets/login.jpg'; // Replace with your image path
+import '../App.css';
 
 type Customer = {
     name: string;
@@ -54,7 +55,16 @@ const CustomerPage: React.FC = () => {
     };
 
     return (
-        <div>
+        <div
+            style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    minHeight: '100vh',
+                    margin: 0,
+                }}
+        >
             <Navbar />
             <div className="container mx-auto p-4">
                 <form onSubmit={handleSubmit} className="mb-4">

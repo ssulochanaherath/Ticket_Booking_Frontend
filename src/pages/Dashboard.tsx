@@ -16,14 +16,14 @@ const Dashboard: React.FC = () => {
             setCurrentIndex((prevIndex) =>
                 prevIndex === images.length - 1 ? 0 : prevIndex + 1
             );
-        }, 5000); // Change image every 3 seconds
+        }, 5000); // Change image every 5 seconds
         return () => clearInterval(interval);
-    }, [images.length]);
+    }, []);
 
     return (
         <div className="page-container">
             <Navbar />
-            <div className="relative w-[1000px] h-[630px] overflow-hidden">
+            <div className="relative w-[1000px] h-[590px] overflow-hidden">
                 {images.map((image, index) => (
                     <img
                         key={index}
@@ -34,14 +34,12 @@ const Dashboard: React.FC = () => {
                         }`}
                     />
                 ))}
-                <div>
+                <div className="absolute top-0 right-0 m-4">
                     <TestCalendar />
                 </div>
-
-                <div className="booking-button">
-                    <button className="green-booking-btn">Booking</button> {/* Added button */}
+                <div className="absolute bottom-0 right-0 m-4">
+                    <button className="green-booking-btn">Booking</button>
                 </div>
-
             </div>
         </div>
     );

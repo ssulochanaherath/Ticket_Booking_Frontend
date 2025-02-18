@@ -69,7 +69,7 @@
 /* Override the background color of the calendar */
 .react-calendar {
   background-color: #DCD7C9;
-  border-radius: 10%;
+  border-radius: 5%;
 }
 
 /* Change the color of the navigation buttons */
@@ -93,9 +93,9 @@
 
 /* Style the selected day */
 .react-calendar__tile--active {
-  background-color: #FFB22C; /* Blue background */
+  background-color: blue; /* Blue background */
   color: white;
-  border-radius: 50%;
+  border-radius: 25%;
 }
 
 

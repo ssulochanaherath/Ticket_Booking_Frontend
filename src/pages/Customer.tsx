@@ -140,7 +140,7 @@ const CustomerPage: React.FC = () => {
                     </thead>
                     <tbody>
                     {customers.map((customer) => (
-                        <tr key={customer.id}>
+                        <tr key={customer.id} >
                             <td className="border px-4 py-2 text-orange-400">{customer.id}</td>
                             <td className="border px-4 py-2 text-white">{customer.name}</td>
                             <td className="border px-4 py-2 text-white">{customer.email}</td>

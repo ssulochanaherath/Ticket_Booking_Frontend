@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Customer from "./pages/Customer.tsx";
 import Films from "./pages/Films.tsx";
+import Seats from "./pages/Seats.tsx";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/films" element={<Films />} />
                 <Route path="/customer" element={<Customer />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/seats" element={<Seats />} />
             </Routes>
         </Router>
     );

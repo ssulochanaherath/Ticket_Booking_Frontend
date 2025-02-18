@@ -1,4 +1,3 @@
-// Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import TestCalendar from '../components/TestCalendar';
@@ -16,29 +15,32 @@ const Dashboard: React.FC = () => {
             setCurrentIndex((prevIndex) =>
                 prevIndex === images.length - 1 ? 0 : prevIndex + 1
             );
-        }, 3000); // Change image every 5 seconds
+        }, 3000); // Change image every 3 seconds
         return () => clearInterval(interval);
     }, []);
 
     return (
         <div className="page-container">
             <Navbar />
-            <div className="relative w-[1000px] h-[585px] overflow-hidden">
+            <div className="relative w-full h-[585px] overflow-hidden">
                 {images.map((image, index) => (
-                    <img
+                    <div
                         key={index}
-                        src={image}
-                        alt={`Slide ${index + 1}`}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                        className={`absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ${
                             index === currentIndex ? 'opacity-100' : 'opacity-0'
                         }`}
-                    />
+                        style={{ backgroundImage: `url(${image})` }}
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    </div>
                 ))}
-                <div className="absolute top-0 right-0 m-4">
+                <div className="absolute top-0 right-0 m-4 z-10">
                     <TestCalendar />
                 </div>
-                <div className="absolute bottom-0 right-0 m-4">
-                    <button className="green-booking-btn">Booking</button>
+                <div className="absolute bottom-0 right-0 m-4 z-10">
+                    <button className="px-6 py-2 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-green-700 transition duration-300">
+                        Booking
+                    </button>
                 </div>
             </div>
         </div>

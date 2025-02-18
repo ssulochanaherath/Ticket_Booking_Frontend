@@ -12,7 +12,11 @@ const TestCalendar: React.FC = () => {
 
     return (
         <div className="calendar-wrapper">
-            <Calendar onChange={handleDateChange} value={date} />
+            <Calendar
+                onChange={handleDateChange}
+                value={date}
+                className="custom-calendar" // Apply custom class if needed
+            />
         </div>
     );
 };

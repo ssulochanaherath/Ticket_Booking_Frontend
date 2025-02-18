@@ -2,28 +2,36 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import backgroundImage from '../assets/login.jpg'; // Replace with your image path
 import '../App.css';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 type Customer = {
+    id: string;
     name: string;
     email: string;
     phone: string;
-    address: string;
 };
 
 const CustomerPage: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [formData, setFormData] = useState<Customer>({
+        id: '',
         name: '',
         email: '',
         phone: '',
-        address: '',
     });
     const [isEditing, setIsEditing] = useState(false);
     const [currentEmail, setCurrentEmail] = useState<string>('');
+    const [counter, setCounter] = useState<number>(1); // Initialize counter
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const generateCustomerId = (): string => {
+        const id = `C${counter.toString().padStart(3, '0')}`;
+        setCounter(counter + 1); // Increment counter for next ID
+        return id;
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -36,34 +44,35 @@ const CustomerPage: React.FC = () => {
             );
             setIsEditing(false);
         } else {
-            setCustomers([...customers, formData]);
+            const newCustomer = { ...formData, id: generateCustomerId() };
+            setCustomers([...customers, newCustomer]);
         }
-        setFormData({ name: '', email: '', phone: '', address: '' });
+        setFormData({ id: '', name: '', email: '', phone: '' });
     };
 
-    const handleEdit = (email: string) => {
-        const customer = customers.find((cust) => cust.email === email);
+    const handleEdit = (id: string) => {
+        const customer = customers.find((cust) => cust.id === id);
         if (customer) {
             setFormData(customer);
-            setCurrentEmail(email);
+            setCurrentEmail(customer.email); // Retain email for form submission
             setIsEditing(true);
         }
     };
 
-    const handleDelete = (email: string) => {
-        setCustomers(customers.filter((customer) => customer.email !== email));
+    const handleDelete = (id: string) => {
+        setCustomers(customers.filter((customer) => customer.id !== id));
     };
 
     return (
         <div
             style={{
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    minHeight: '100vh',
-                    margin: 0,
-                }}
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                minHeight: '100vh',
+                margin: 0,
+            }}
         >
             <Navbar />
             <div className="container mx-auto p-4">
@@ -74,8 +83,8 @@ const CustomerPage: React.FC = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Customer Name"
-                            className="p-2 border border-gray-300 rounded"
+                            placeholder="Name"
+                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
                             required
                         />
                         <input
@@ -83,8 +92,8 @@ const CustomerPage: React.FC = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="Customer Email"
-                            className="p-2 border border-gray-300 rounded"
+                            placeholder="Email"
+                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
                             required
                         />
                         <input
@@ -92,24 +101,15 @@ const CustomerPage: React.FC = () => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            placeholder="Customer Phone"
-                            className="p-2 border border-gray-300 rounded"
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="Customer Address"
-                            className="p-2 border border-gray-300 rounded"
+                            placeholder="Phone"
+                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
                             required
                         />
                     </div>
                     <div className="mt-4">
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                            className="bg-orange-500 text-white px-4 py-2 rounded mr-2"
                         >
                             {isEditing ? 'Update' : 'Save'}
                         </button>
@@ -118,7 +118,7 @@ const CustomerPage: React.FC = () => {
                                 type="button"
                                 onClick={() => {
                                     setIsEditing(false);
-                                    setFormData({ name: '', email: '', phone: '', address: '' });
+                                    setFormData({ id: '', name: '', email: '', phone: '' });
                                 }}
                                 className="bg-gray-500 text-white px-4 py-2 rounded"
                             >
@@ -128,36 +128,40 @@ const CustomerPage: React.FC = () => {
                     </div>
                 </form>
 
-                <table className="min-w-full bg-white">
+                <table className="min-w-full bg-transparent">
                     <thead>
                     <tr>
-                        <th className="py-2">Name</th>
-                        <th className="py-2">Email</th>
-                        <th className="py-2">Phone</th>
-                        <th className="py-2">Address</th>
-                        <th className="py-2">Actions</th>
+                        <th className="py-2 text-white">Id</th>
+                        <th className="py-2 text-white">Name</th>
+                        <th className="py-2 text-white">Email</th>
+                        <th className="py-2 text-white">Phone</th>
+                        <th className="py-2 text-white">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {customers.map((customer) => (
-                        <tr key={customer.email}>
-                            <td className="border px-4 py-2">{customer.name}</td>
-                            <td className="border px-4 py-2">{customer.email}</td>
-                            <td className="border px-4 py-2">{customer.phone}</td>
-                            <td className="border px-4 py-2">{customer.address}</td>
+                        <tr key={customer.id}>
+                            <td className="border px-4 py-2 text-orange-400">{customer.id}</td>
+                            <td className="border px-4 py-2 text-white">{customer.name}</td>
+                            <td className="border px-4 py-2 text-white">{customer.email}</td>
+                            <td className="border px-4 py-2 text-white">{customer.phone}</td>
                             <td className="border px-4 py-2">
-                                <button
-                                    onClick={() => handleEdit(customer.email)}
-                                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(customer.email)}
-                                    className="bg-red-500 text-white px-2 py-1 rounded"
-                                >
-                                    Delete
-                                </button>
+                                <div className="flex justify-center space-x-2">
+                                    <button
+                                        onClick={() => handleEdit(customer.id)}
+                                        className="bg-yellow-500 text-white p-2 rounded"
+                                        aria-label="Edit"
+                                    >
+                                        <FaEdit />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(customer.id)}
+                                        className="bg-red-500 text-white p-2 rounded"
+                                        aria-label="Delete"
+                                    >
+                                        <FaTrash />
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaFilm } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 function Navbar() {
     //const [currentDate, setCurrentDate] = useState('');
@@ -96,8 +97,9 @@ function Navbar() {
                         onClick={handleSignOut}
                         className="text-sm text-white bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 px-6 py-2 rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105"
                     >
-                        Sign Out
+                        <FaSignOutAlt className="text-lg" />
                     </button>
+
 
                 </div>
             </div>

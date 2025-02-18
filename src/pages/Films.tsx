@@ -74,6 +74,7 @@ const Films: React.FC = () => {
     return (
         <div
             style={{
+                position: 'relative',
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -82,106 +83,119 @@ const Films: React.FC = () => {
                 margin: 0,
             }}
         >
-        <div>
-            <Navbar />
-            <div className="container mx-auto p-4">
-                <form onSubmit={handleSubmit} className="mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Movie Name"
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white"
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="year"
-                            value={formData.year}
-                            onChange={handleChange}
-                            placeholder="Year"
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white"
-                            required
-                        />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white"
-                            required={!isEditing}
-                        />
-                    </div>
-                    <div className="mt-4">
-                        <button
-                            type="submit"
-                            className="bg-orange-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                            {isEditing ? "Update" : "Save"}
-                        </button>
-                        {isEditing && (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setFormData({ id: "", name: "", year: "", image: "" });
-                                }}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
-                                Cancel
-                            </button>
-                        )}
-                    </div>
-                </form>
+            {/* Blur Overlay */}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backdropFilter: 'blur(2px)', // Adjust blur intensity
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Optional: Darken background
+                }}
+            ></div>
 
-                <table className="min-w-full bg-transparent mt-4">
-                    <thead>
-                    <tr>
-                        <th className="py-2 text-white">ID</th>
-                        <th className="py-2 text-white">Movie Name</th>
-                        <th className="py-2 text-white">Year</th>
-                        <th className="py-2 text-white">Image</th>
-                        <th className="py-2 text-white">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {films.map((film) => (
-                        <tr key={film.id} className="border-b border-gray-600">
-                            <td className="py-2 px-4 text-orange-400">{film.id}</td>
-                            <td className="py-2 px-4 text-white">{film.name}</td>
-                            <td className="py-2 px-4 text-white">{film.year}</td>
-                            <td className="py-2 px-4 flex justify-center items-center">
-                                <img
-                                    src={film.image}
-                                    alt={film.name}
-                                    className="w-16 h-16 rounded object-cover"
-                                />
-                            </td>
-                            <td className="py-2 px-4">
-                                <div className="flex justify-center space-x-2">
-                                    <button
-                                        onClick={() => handleEdit(film.id)}
-                                        className="bg-yellow-500 text-white p-2 rounded"
-                                        aria-label="Edit"
-                                    >
-                                        <FaEdit />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(film.id)}
-                                        className="bg-red-500 text-white p-2 rounded"
-                                        aria-label="Delete"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                </div>
-                            </td>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+                <Navbar />
+                <div className="container mx-auto p-4">
+                    <form onSubmit={handleSubmit} className="mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Movie Name"
+                                className="p-2 border border-gray-300 rounded bg-transparent text-white"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                placeholder="Year"
+                                className="p-2 border border-gray-300 rounded bg-transparent text-white"
+                                required
+                            />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="p-2 border border-gray-300 rounded bg-transparent text-white"
+                                required={!isEditing}
+                            />
+                        </div>
+                        <div className="mt-4">
+                            <button
+                                type="submit"
+                                className="bg-orange-500 text-white px-4 py-2 rounded mr-2"
+                            >
+                                {isEditing ? "Update" : "Save"}
+                            </button>
+                            {isEditing && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        setFormData({ id: "", name: "", year: "", image: "" });
+                                    }}
+                                    className="bg-gray-500 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                            )}
+                        </div>
+                    </form>
+
+                    <table className="min-w-full bg-transparent mt-4">
+                        <thead>
+                        <tr>
+                            <th className="py-2 text-white">ID</th>
+                            <th className="py-2 text-white">Movie Name</th>
+                            <th className="py-2 text-white">Year</th>
+                            <th className="py-2 text-white">Image</th>
+                            <th className="py-2 text-white">Actions</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {films.map((film) => (
+                            <tr key={film.id} className="border-b border-gray-600">
+                                <td className="py-2 px-4 text-orange-400">{film.id}</td>
+                                <td className="py-2 px-4 text-white">{film.name}</td>
+                                <td className="py-2 px-4 text-white">{film.year}</td>
+                                <td className="py-2 px-4 flex justify-center items-center">
+                                    <img
+                                        src={film.image}
+                                        alt={film.name}
+                                        className="w-16 h-16 rounded object-cover"
+                                    />
+                                </td>
+                                <td className="py-2 px-4">
+                                    <div className="flex justify-center space-x-2">
+                                        <button
+                                            onClick={() => handleEdit(film.id)}
+                                            className="bg-yellow-500 text-white p-2 rounded"
+                                            aria-label="Edit"
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(film.id)}
+                                            className="bg-red-500 text-white p-2 rounded"
+                                            aria-label="Delete"
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
         </div>
     );
 };

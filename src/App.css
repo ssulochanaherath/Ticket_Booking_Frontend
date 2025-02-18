@@ -56,18 +56,6 @@
   margin: 16px; /* Optional: adds space from the edges */
 }
 
-/* CustomCalendar.css */
-.react-calendar {
-  width: 300px; /* Set the desired width */
-  hight: 300px;
-  max-width: 100%;
-  background-color: #fff;
-  border: 1px solid #a0a096;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.125em;
-}
-
-
 .calendar-container {
   margin-top: 20px;
 }

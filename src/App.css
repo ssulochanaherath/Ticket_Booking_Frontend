@@ -58,12 +58,46 @@
 
 .calendar-container {
   margin-top: 20px;
+  border-radius: 10%;
 }
 
 .react-calendar__navigation button {
-  background-color: #143D60; /* Green background */
+  background-color: #09122C; /* Green background */
+  color: black;
+}
+
+/* Override the background color of the calendar */
+.react-calendar {
+  background-color: #DCD7C9;
+  border-radius: 10%;
+}
+
+/* Change the color of the navigation buttons */
+.react-calendar__navigation button {
+  background-color: #09122C; /* Green background */
   color: white;
 }
+
+/* Style the tiles (days) */
+.react-calendar__tile {
+  border-radius: 5px;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+/* Highlight the current day */
+.react-calendar__tile--now {
+  background-color: #ffeb3b; /* Yellow background */
+  color: black;
+}
+
+/* Style the selected day */
+.react-calendar__tile--active {
+  background-color: #FFB22C; /* Blue background */
+  color: white;
+  border-radius: 50%;
+}
+
 
 .green-booking-btn {
   position: fixed;

@@ -32,7 +32,8 @@ function Navbar() {
     };
 
     return (
-        <nav className="bg-gradient-to-r black from-gray-800 to-gray-900 p-4">
+        //bg-[#1a1a1a] p-4
+        <nav className="bg-gradient-to-r from-black to-blue-950 p-4">
             <div className="flex justify-between items-center">
                 {/* Left side: Icon and Film Hall Name */}
                 <div className="flex items-center space-x-2">

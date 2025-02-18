@@ -66,7 +66,7 @@ function Navbar() {
                         Films
                     </NavLink>
                     <NavLink
-                        to="/customers"
+                        to="/customer"
                         className={({ isActive }) =>
                             isActive ? 'text-yellow-300' : 'text-white'
                         }

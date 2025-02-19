@@ -128,10 +128,10 @@ const CustomerPage: React.FC = () => {
                     </div>
                 </form>
 
-                <table className="min-w-full bg-transparent mt-4">
+                <table className="min-w-full bg-transparent">
                     <thead>
                     <tr>
-                        <th className="py-2 text-white">ID</th>
+                        <th className="py-2 text-white">Id</th>
                         <th className="py-2 text-white">Name</th>
                         <th className="py-2 text-white">Email</th>
                         <th className="py-2 text-white">Phone</th>
@@ -140,12 +140,12 @@ const CustomerPage: React.FC = () => {
                     </thead>
                     <tbody>
                     {customers.map((customer) => (
-                        <tr key={customer.id} className="border-b border-gray-600 whitespace-nowrap">
-                            <td className="py-2 px-4 text-orange-400">{customer.id}</td>
-                            <td className="py-2 px-4 text-white">{customer.name}</td>
-                            <td className="py-2 px-4 text-white">{customer.email}</td>
-                            <td className="py-2 px-4 text-white">{customer.phone}</td>
-                            <td className="py-2 px-4 text-white">
+                        <tr key={customer.id} >
+                            <td className="border px-4 py-2 text-orange-400">{customer.id}</td>
+                            <td className="border px-4 py-2 text-white">{customer.name}</td>
+                            <td className="border px-4 py-2 text-white">{customer.email}</td>
+                            <td className="border px-4 py-2 text-white">{customer.phone}</td>
+                            <td className="border px-4 py-2">
                                 <div className="flex justify-center space-x-2">
                                     <button
                                         onClick={() => handleEdit(customer.id)}

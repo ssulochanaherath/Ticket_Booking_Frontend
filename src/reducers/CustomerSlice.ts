@@ -1,41 +1,44 @@
-// src/reducers/CustomerSlice.ts
+// src/store/customerSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CustomerModel } from '../models/CustomerModel';
+
+type Customer = {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+};
 
 interface CustomerState {
-    customers: CustomerModel[];
+    customers: Customer[];
+    counter: number;
 }
 
 const initialState: CustomerState = {
     customers: [],
+    counter: 1, // Initialize counter
 };
 
-// Create a slice of the Redux store
 const customerSlice = createSlice({
-    name: 'customers',
+    name: 'customer',
     initialState,
     reducers: {
-        getCustomers: (state) => {
-            // You would likely fetch customers from an API here, but for now,
-            // we will just set it to the initial state or any static data
-            return state;
+        addCustomer: (state, action: PayloadAction<Customer>) => {
+            const newCustomer = { ...action.payload, id: `C${state.counter.toString().padStart(3, '0')}` };
+            state.customers.push(newCustomer);
+            state.counter += 1; // Increment counter for next ID
         },
-        saveCustomer: (state, action: PayloadAction<CustomerModel>) => {
-            state.customers.push(action.payload);
-        },
-        updateCustomer: (state, action: PayloadAction<{ email: string, updatedCustomer: CustomerModel }>) => {
-            const { email, updatedCustomer } = action.payload;
-            const customerIndex = state.customers.findIndex((cust) => cust.email === email);
-            if (customerIndex !== -1) {
-                state.customers[customerIndex] = updatedCustomer;
+        updateCustomer: (state, action: PayloadAction<Customer>) => {
+            const { email, name, phone } = action.payload;
+            const customerIndex = state.customers.findIndex(customer => customer.email === email);
+            if (customerIndex >= 0) {
+                state.customers[customerIndex] = { ...state.customers[customerIndex], name, phone };
             }
         },
         deleteCustomer: (state, action: PayloadAction<string>) => {
-            state.customers = state.customers.filter((cust) => cust.email !== action.payload);
+            state.customers = state.customers.filter(customer => customer.id !== action.payload);
         },
     },
 });
 
-export const { getCustomers, saveCustomer, updateCustomer, deleteCustomer } = customerSlice.actions;
-
+export const { addCustomer, updateCustomer, deleteCustomer } = customerSlice.actions;
 export default customerSlice.reducer;

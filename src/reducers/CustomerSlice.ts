@@ -8,6 +8,7 @@ interface CustomerState {
 
 const initialState: CustomerState = {
     customers: [],
+
     counter: 1,
 };
 

@@ -169,6 +169,7 @@ const CustomerPage: React.FC = () => {
                 </table>
             </div>
         </div>
+
     );
 };
 

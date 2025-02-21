@@ -1,23 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Customer from "./pages/Customer";
-import Films from "./pages/Films";
-import Seats from "./pages/Seats";
+import { createBrowserRouter, RouterProvider } from "react-router"
+import "./App.css"
+import { RootLayout } from "./components/RootLayout"
+import Customer from "./pages/Customer"
+//import Item from "./pages/Item"
+//import PlaceOrder from "./pages/PlaceOrder"
+//import Dashboard from "./pages/Dashboard"
 
 function App() {
+    const routes = createBrowserRouter([
+        {
+            path: "",
+            element: <RootLayout />,
+            children: [
+                //{ path: "", element: <Dashboard /> },
+                { path: "/", element: <Customer /> },
+                //{ path: "/item", element: <Item /> },
+                //{ path: "/place-order", element: <PlaceOrder /> }
+            ]
+        }
+    ])
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/films" element={<Films />} />
-                <Route path="/customer" element={<Customer />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/seats" element={<Seats />} />
-            </Routes>
-        </Router>
-    );
+        <>
+            <RouterProvider router={routes} />
+        </>
+    )
 }
 
-export default App;
+export default App

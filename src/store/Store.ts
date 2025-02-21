@@ -1,10 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
-import customerReducer from '../reducers/CustomerSlice';
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import CustomerSlice from "../reducers/CustomerSlice.ts";
+//import ItemSlice from "../reducers/ItemSlice.ts";
 
-const store = configureStore({
-    reducer: {
-        customer: customerReducer,
-    },
-});
+const rootReducer = combineReducers({
+    customers: CustomerSlice,
+    //items: ItemSlice,
+})
 
-export default store;
+export const store = configureStore({
+    reducer: rootReducer
+})
+
+export type AppDispatch = typeof store.dispatch;

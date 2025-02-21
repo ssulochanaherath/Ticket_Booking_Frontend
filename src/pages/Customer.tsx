@@ -1,167 +1,188 @@
-import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import backgroundImage from '../assets/login.jpg'; // Replace with your image path
-import '../App.css';
+import {useEffect, useState} from "react"
+import backgroundImage from '../assets/login.jpg';
+import Navbar from "../components/Navbar.tsx";
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import {useDispatch, useSelector} from "react-redux";
+import {
+    addCustomer,
+    deleteCustomer,
+    deletedCustomer,
+    getCustomers,
+    saveCustomer,
+    updateCustomer,
+    updatedCustomer
+} from "../reducers/CustomerSlice.ts";
+import {CustomerModel} from "../models/CustomerModel.ts";
+import {AppDispatch} from "../store/Store.ts";
 
-type Customer = {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-};
+function Customer() {
+    const dispatch = useDispatch<AppDispatch>();
+    const customers = useSelector(state => state.customers);
 
-const CustomerPage: React.FC = () => {
-    const [customers, setCustomers] = useState<Customer[]>([]);
-    const [formData, setFormData] = useState<Customer>({
-        id: '',
-        name: '',
-        email: '',
-        phone: '',
-    });
-    const [isEditing, setIsEditing] = useState(false);
-    const [currentEmail, setCurrentEmail] = useState<string>('');
-    const [counter, setCounter] = useState<number>(1); // Initialize counter
+    useEffect(() => {
+        dispatch(getCustomers());
+    }, [dispatch]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const [name, setName] = useState("")
+    const [nic, setNic] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+    const [isEditing, setIsEditing] = useState(false)
 
-    const generateCustomerId = (): string => {
-        const id = `C${counter.toString().padStart(3, '0')}`;
-        setCounter(counter + 1); // Increment counter for next ID
-        return id;
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (isEditing) {
-            setCustomers(
-                customers.map((customer) =>
-                    customer.email === currentEmail ? formData : customer
-                )
-            );
-            setIsEditing(false);
-        } else {
-            const newCustomer = { ...formData, id: generateCustomerId() };
-            setCustomers([...customers, newCustomer]);
+    const handleAdd = () => {
+        if (!name || !nic || !email || !phone) {
+            alert("All fields are required!")
+            return
         }
-        setFormData({ id: '', name: '', email: '', phone: '' });
-    };
+        const newCustomer = new CustomerModel(name, nic, email, phone);
+        dispatch(saveCustomer(newCustomer));
+        resetForm();
+    }
 
-    const handleEdit = (id: string) => {
-        const customer = customers.find((cust) => cust.id === id);
-        if (customer) {
-            setFormData(customer);
-            setCurrentEmail(customer.email); // Retain email for form submission
-            setIsEditing(true);
+    const handleEdit = (customer: CustomerModel) => {
+        setName(customer.name)
+        setNic(customer.nic)
+        setEmail(customer.email)
+        setPhone(customer.phone)
+        setIsEditing(true)
+    }
+
+    const handleUpdate = () => {
+        if (!name || !nic || !email || !phone) {
+            alert("All fields are required!");
+            return;
         }
-    };
 
-    const handleDelete = (id: string) => {
-        setCustomers(customers.filter((customer) => customer.id !== id));
-    };
+        const updateCust = new CustomerModel(name, nic, email, phone);
+
+        dispatch(updatedCustomer({ email, customer: updateCust }))
+            .then(() => {
+                resetForm();
+            })
+            .catch((error) => {
+                console.error("Error updating customer:", error.message);
+            });
+    }
+
+    const handleCancel = () => {
+        resetForm();
+    }
+
+    const handleDelete = (customerEmail: string) => {
+        dispatch(deletedCustomer(customerEmail));
+    }
+
+    const resetForm = () => {
+        setName("")
+        setNic("")
+        setEmail("")
+        setPhone("")
+        setIsEditing(false)
+    }
 
     return (
         <div
-            style={{
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                minHeight: '100vh',
-                margin: 0,
-            }}
+            style={{ backgroundImage: `url(${backgroundImage})` }}
+            className="min-h-screen bg-cover bg-center"
         >
             <Navbar />
-            <div className="container mx-auto p-4">
-                <form onSubmit={handleSubmit} className="mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Name"
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
-                            required
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Email"
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
-                            required
-                        />
-                        <input
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="Phone"
-                            className="p-2 border border-gray-300 rounded bg-transparent text-white text-sm"
-                            required
-                        />
-                    </div>
-                    <div className="mt-4">
-                        <button
-                            type="submit"
-                            className="bg-orange-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                            {isEditing ? 'Update' : 'Save'}
-                        </button>
-                        {isEditing && (
+
+            <div className="p-6 bg-opacity-0 bg-white rounded-lg mx-auto max-w-screen-xl mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="p-3 border border-gray-300 rounded bg-transparent text-white text-sm w-full h-10"
+                    />
+                    <input
+                        type="text"
+                        name="nic"
+                        placeholder="NIC"
+                        value={nic}
+                        onChange={(e) => setNic(e.target.value)}
+                        className="p-3 border border-gray-300 rounded bg-transparent text-white text-sm w-full h-10"
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="p-3 border border-gray-300 rounded bg-transparent text-white text-sm w-full h-10"
+                    />
+                    <input
+                        type="text"
+                        name="phone"
+                        placeholder="Phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="p-3 border border-gray-300 rounded bg-transparent text-white text-sm w-full h-10"
+                    />
+                </div>
+
+                {/* Conditionally render Add/Update button */}
+                <div className="mb-4 flex space-x-4">
+                    {isEditing ? (
+                        <>
                             <button
-                                type="button"
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setFormData({ id: '', name: '', email: '', phone: '' });
-                                }}
+                                onClick={handleUpdate}
+                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                            >
+                                Update
+                            </button>
+                            <button
+                                onClick={handleCancel}
                                 className="bg-gray-500 text-white px-4 py-2 rounded"
                             >
                                 Cancel
                             </button>
-                        )}
-                    </div>
-                </form>
+                        </>
+                    ) : (
+                        <button
+                            onClick={handleAdd}
+                            className="bg-orange-500 text-white px-4 py-2 rounded"
+                        >
+                            Add
+                        </button>
+                    )}
+                </div>
 
-                <table className="min-w-full bg-transparent">
+                {/* Table takes up full width */}
+                <table className="min-w-full bg-transparent divide-y divide-gray-500">
                     <thead>
-                    <tr>
-                        <th className="py-2 text-white">Id</th>
+                    <tr className="bg-gray-100 bg-opacity-0">
+                        <th className="py-2 text-white">ID</th>
                         <th className="py-2 text-white">Name</th>
+                        <th className="py-2 text-white">NIC</th>
                         <th className="py-2 text-white">Email</th>
                         <th className="py-2 text-white">Phone</th>
                         <th className="py-2 text-white">Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {customers.map((customer) => (
-                        <tr key={customer.id} >
-                            <td className="border px-4 py-2 text-orange-400">{customer.id}</td>
+                    <tbody className="space-y-4">
+                    {customers.map((customer: CustomerModel) => (
+                        <tr key={customer.email} className="rounded-lg">
+                            <td className="border px-4 py-2 text-orange-400 rounded-l-xl">{customer.id}</td>
                             <td className="border px-4 py-2 text-white">{customer.name}</td>
+                            <td className="border px-4 py-2 text-white">{customer.nic}</td>
                             <td className="border px-4 py-2 text-white">{customer.email}</td>
                             <td className="border px-4 py-2 text-white">{customer.phone}</td>
-                            <td className="border px-4 py-2">
-                                <div className="flex justify-center space-x-2">
-                                    <button
-                                        onClick={() => handleEdit(customer.id)}
-                                        className="bg-yellow-500 text-white p-2 rounded"
-                                        aria-label="Edit"
-                                    >
-                                        <FaEdit />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(customer.id)}
-                                        className="bg-red-500 text-white p-2 rounded"
-                                        aria-label="Delete"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                </div>
+                            <td className="border px-4 py-2 flex justify-center space-x-2 rounded-r-xl">
+                                <button
+                                    onClick={() => handleEdit(customer)}
+                                    className="bg-yellow-500 text-white p-2 rounded"
+                                >
+                                    <FaEdit />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(customer.email)}
+                                    className="bg-red-500 text-white p-2 rounded"
+                                >
+                                    <FaTrash />
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -170,6 +191,6 @@ const CustomerPage: React.FC = () => {
             </div>
         </div>
     );
-};
+}
 
-export default CustomerPage;
+export default Customer;

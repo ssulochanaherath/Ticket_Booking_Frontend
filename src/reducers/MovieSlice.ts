@@ -1,4 +1,3 @@
-// reducers/movieSlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { MovieModel } from "../models/MovieModel";
 import axios from "axios";
@@ -9,7 +8,6 @@ const api = axios.create({
     baseURL: "http://localhost:3000/",
 });
 
-// ✅ Fetch all movies
 export const getMovies = createAsyncThunk(
     "movie/getMovies",
     async (_, { rejectWithValue }) => {
@@ -22,7 +20,6 @@ export const getMovies = createAsyncThunk(
     }
 );
 
-// ✅ Add new movie and refresh list
 export const saveMovie = createAsyncThunk(
     "movie/saveMovie",
     async (movie: MovieModel, { dispatch, rejectWithValue }) => {
@@ -36,9 +33,8 @@ export const saveMovie = createAsyncThunk(
     }
 );
 
-// ✅ Update movie and refresh list
-export const updateMovie = createAsyncThunk(
-    "movie/updateMovie",
+export const updatedMovie = createAsyncThunk(
+    "movie/updatedMovies",
     async ({ id, movie }: { id: string; movie: MovieModel }, { dispatch, rejectWithValue }) => {
         try {
             const response = await api.put(`/Movie/update/${id}`, movie);
@@ -50,8 +46,7 @@ export const updateMovie = createAsyncThunk(
     }
 );
 
-// ✅ Delete movie and refresh list
-export const deleteMovie = createAsyncThunk(
+export const deletedMovie = createAsyncThunk(
     "movie/deleteMovie",
     async (id: string, { dispatch, rejectWithValue }) => {
         try {
@@ -64,40 +59,40 @@ export const deleteMovie = createAsyncThunk(
     }
 );
 
-const movieSlice = createSlice({
+const MovieSlice = createSlice({
     name: "movie",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // ✅ Fetch movies
-            .addCase(getMovies.fulfilled, (_, action) => action.payload)
-            .addCase(getMovies.rejected, (state, action) => {
-                console.error("Error fetching movies:", action.payload);
-            })
-            // ✅ Save movie
-            .addCase(saveMovie.fulfilled, (state, action) => {
-                state.push(action.payload);
-            })
-            .addCase(saveMovie.rejected, (state, action) => {
-                console.error("Error saving movie:", action.payload);
-            })
-            // ✅ Update movie
-            .addCase(updateMovie.fulfilled, (state, action) => {
-                const index = state.findIndex((m) => m.id === action.payload.id);
-                if (index >= 0) state[index] = action.payload;
-            })
-            .addCase(updateMovie.rejected, (state, action) => {
-                console.error("Error updating movie:", action.payload);
-            })
-            // ✅ Delete movie
-            .addCase(deleteMovie.fulfilled, (state, action) => {
-                return state.filter((movie) => movie.id !== action.payload);
-            })
-            .addCase(deleteMovie.rejected, (state, action) => {
-                console.error("Error deleting movie:", action.payload);
-            });
-    },
-});
+        .addCase(getMovies.fulfilled, (_, action) => action.payload)
+        .addCase(getMovies.rejected, (state, action) => {
+            console.error("Error fetching movies:", action.payload);
+        })
+        .addCase(saveMovie.fulfilled, (state, action) => {
+            state.push(action.payload);
+        })
+        .addCase(saveMovie.rejected, (state, action) => {
+            console.error("Error saving movie:", action.payload);
+        })
 
-export default movieSlice.reducer;
+
+        .addCase(updatedMovie.fulfilled, (state, action) => {
+            const index = state.findIndex((m) => m.id === action.payload.id);
+            if (index >= 0) state[index] = action.payload;
+        })
+        .addCase(updatedMovie.rejected, (state, action) => {
+            console.error("Error updating movie:", action.payload);
+        })
+
+
+        .addCase(deletedMovie.fulfilled, (state, action) => {
+            return state.filter((movie) => movie.id !== action.payload);
+        })
+        .addCase(deletedMovie.rejected, (state, action) => {
+            console.error("Error deleting movie:", action.payload);
+        });
+    },
+})
+
+export default MovieSlice.reducer;

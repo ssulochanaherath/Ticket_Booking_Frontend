@@ -1,9 +1,19 @@
-// components/Movie.tsx
 import { useEffect, useState } from "react";
+import backgroundImage from "../assets/login.jpg";
+import Navbar from "../components/Navbar.tsx";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../store/Store";
-import { getMovies, saveMovie, updateMovie, deleteMovie } from "../reducers/MovieSlice";
+import {
+    addMovie,
+    deleteMovie,
+    deletedMovie,
+    getMovies,
+    saveMovie,
+    updateMovie,
+    updatedMovie,
+} from "../reducers/MovieSlice";
 import { MovieModel } from "../models/MovieModel";
+import { AppDispatch } from "../store/Store.ts";
 
 function Movie() {
     const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +27,7 @@ function Movie() {
     const [year, setYear] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [editId, setEditId] = useState("");
+    const [id, setId] = useState(""); // Add an id state for editing
 
     const handleAdd = () => {
         if (!name || !year || !image) {
@@ -33,22 +43,31 @@ function Movie() {
         setName(movie.name);
         setYear(movie.year);
         setImage(movie.image);
-        setEditId(movie.id);
+        setId(movie.id); // Set the id for the movie being edited
         setIsEditing(true);
     };
 
     const handleUpdate = () => {
-        if (!name || !year || !image) {
+        if (!name || !year || !image || !id) {
             alert("All fields are required!");
             return;
         }
-        const updatedMovie = new MovieModel(editId, name, year, image);
-        dispatch(updateMovie({ id: editId, movie: updatedMovie }));
+        const updatedMovies = new MovieModel(id, name, year, image);
+        dispatch(updatedMovie({ id, movie: updatedMovies }))
+            .then(() => {
+                resetForm();
+            })
+            .catch((error) => {
+                console.error("Error updating movie:", error.message);
+            });
+    };
+
+    const handleCancel = () => {
         resetForm();
     };
 
-    const handleDelete = (id: string) => {
-        dispatch(deleteMovie(id));
+    const handleDelete = (movieId: string) => {
+        dispatch(deletedMovie(movieId)); // Use movieId instead of year
     };
 
     const resetForm = () => {
@@ -56,14 +75,12 @@ function Movie() {
         setYear("");
         setImage(null);
         setIsEditing(false);
+        setId(""); // Reset the id when canceling or adding
     };
 
     return (
-        <div
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-            className="min-h-screen bg-cover bg-center"
-        >
-            <Navbar />
+        <div style={{ backgroundImage: `url(${backgroundImage})` }} className="min-h-screen bg-cover bg-center">
+        <Navbar />
 
             <div className="p-6 bg-opacity-0 bg-white rounded-lg mx-auto max-w-screen-xl mt-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -91,34 +108,23 @@ function Movie() {
                     />
                 </div>
 
-                {/* Conditionally render Add/Update button */}
                 <div className="mb-4 flex space-x-4">
                     {isEditing ? (
                         <>
-                            <button
-                                onClick={handleUpdate}
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
-                            >
+                            <button onClick={handleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">
                                 Update
                             </button>
-                            <button
-                                onClick={handleCancel}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
+                            <button onClick={handleCancel} className="bg-gray-500 text-white px-4 py-2 rounded">
                                 Cancel
                             </button>
                         </>
                     ) : (
-                        <button
-                            onClick={handleAdd}
-                            className="bg-orange-500 text-white px-4 py-2 rounded"
-                        >
+                        <button onClick={handleAdd} className="bg-orange-500 text-white px-4 py-2 rounded">
                             Add
                         </button>
                     )}
                 </div>
 
-                {/* Table takes up full width */}
                 <table className="min-w-full bg-transparent divide-y divide-gray-500">
                     <thead>
                     <tr className="bg-gray-100 bg-opacity-0">
@@ -130,21 +136,18 @@ function Movie() {
                     </tr>
                     </thead>
                     <tbody className="space-y-4">
-                    {customers.map((customer: CustomerModel) => (
-                        <tr key={customer.year} className="rounded-lg">
-                            <td className="border px-4 py-2 text-orange-400 rounded-l-xl">{customer.id}</td>
-                            <td className="border px-4 py-2 text-white">{customer.name}</td>
-                            <td className="border px-4 py-2 text-white">{customer.year}</td>
-                            <td className="border px-4 py-2 text-white">{customer.image?.name}</td>
+                    {movies.map((movie: MovieModel) => (
+                        <tr key={movie.id} className="rounded-lg">
+                            <td className="border px-4 py-2 text-orange-400 rounded-l-xl">{movie.id}</td>
+                            <td className="border px-4 py-2 text-white">{movie.name}</td>
+                            <td className="border px-4 py-2 text-white">{movie.year}</td>
+                            <td className="border px-4 py-2 text-white">{movie.image?.name}</td>
                             <td className="border px-4 py-2 flex justify-center space-x-2 rounded-r-xl">
-                                <button
-                                    onClick={() => handleEdit(customer)}
-                                    className="bg-yellow-500 text-white p-2 rounded"
-                                >
+                                <button onClick={() => handleEdit(movie)} className="bg-yellow-500 text-white p-2 rounded">
                                     <FaEdit />
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(customer.year)}
+                                    onClick={() => handleDelete(movie.id)}
                                     className="bg-red-500 text-white p-2 rounded"
                                 >
                                     <FaTrash />

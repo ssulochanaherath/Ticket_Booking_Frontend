@@ -90,7 +90,15 @@ function Movie() {
     };
 
     return (
-        <div style={{ backgroundImage: `url(${backgroundImage})` }} className="min-h-screen bg-cover bg-center backdrop-blur-">
+        <div
+            style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundAttachment: "fixed", // This keeps the background image static
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+            className="min-h-screen"
+        >
         <Navbar />
 
             <div className="p-6 bg-opacity-0 bg-white rounded-lg mx-auto max-w-screen-xl mt-10">

@@ -22,9 +22,13 @@ export const getMovies = createAsyncThunk(
 
 export const saveMovie = createAsyncThunk(
     "movie/saveMovie",
-    async (movie: MovieModel, { dispatch, rejectWithValue }) => {
+    async (formData: FormData, { dispatch, rejectWithValue }) => {
         try {
-            const response = await api.post("/Movie/add", movie);
+            const response = await api.post("/Movie/add", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
             dispatch(getMovies()); // Fetch updated movies list
             return response.data;
         } catch (error: any) {
@@ -33,11 +37,16 @@ export const saveMovie = createAsyncThunk(
     }
 );
 
+
 export const updatedMovie = createAsyncThunk(
     "movie/updatedMovies",
-    async ({ id, movie }: { id: string; movie: MovieModel }, { dispatch, rejectWithValue }) => {
+    async ({ id, formData }: { id: string; formData: FormData }, { dispatch, rejectWithValue }) => {
         try {
-            const response = await api.put(`/Movie/update/${id}`, movie);
+            const response = await api.put(`/Movie/update/${id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
             dispatch(getMovies()); // Fetch updated movies list
             return response.data;
         } catch (error: any) {
@@ -45,6 +54,7 @@ export const updatedMovie = createAsyncThunk(
         }
     }
 );
+
 
 export const deletedMovie = createAsyncThunk(
     "movie/deleteMovie",

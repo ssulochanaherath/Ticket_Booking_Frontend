@@ -4,6 +4,7 @@ import "./App.css"
 import { RootLayout } from "./components/RootLayout"
 import Customer from "./pages/Customer"
 import Movie from "./pages/Movie"
+import Dashboard from "./pages/Dashboard.tsx";
 //import Item from "./pages/Item"
 //import PlaceOrder from "./pages/PlaceOrder"
 //import Dashboard from "./pages/Dashboard"
@@ -14,7 +15,8 @@ function App() {
             path: "",
             element: <RootLayout />,
             children: [
-                { path: "/", element: <Movie /> },
+                { path: "/", element: <Dashboard />},
+                { path: "/films", element: <Movie /> },
                 { path: "/customer", element: <Customer /> },
                 //{ path: "/item", element: <Item /> },
                 //{ path: "/place-order", element: <PlaceOrder /> }

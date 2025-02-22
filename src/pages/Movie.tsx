@@ -115,7 +115,8 @@ function Movie() {
                         type="file"
                         name="image"
                         onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
-                        className="p-3 border border-gray-300 rounded bg-transparent text-white text-sm w-full h-10"
+                        className="file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-gray-700 file:text-white
+               text-white w-full h-10 border border-gray-300 rounded bg-transparent flex items-center justify-center"
                     />
                 </div>
 

@@ -50,13 +50,6 @@ const Dashboard: React.FC = () => {
                 <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 text-white text-lg font-semibold text-center px-4">
                     {moviePosters[currentIndex].description}
                 </div>
-
-                {/* Booking Button */}
-                <div className="absolute bottom-0 right-0 m-4 z-10">
-                    <button className="px-6 py-2 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-green-700 transition duration-300">
-                        Book Now
-                    </button>
-                </div>
             </div>
         </div>
     );

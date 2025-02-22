@@ -152,15 +152,15 @@ function Movie() {
                             <td className="border px-4 py-2 text-orange-400 rounded-l-xl">{movie.id}</td>
                             <td className="border px-4 py-2 text-white">{movie.name}</td>
                             <td className="border px-4 py-2 text-white">{movie.year}</td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 text-center text-center w-32">
                                 {movie.image ? (
-                                    <img src={movie.image} alt={movie.name} className="w-16 h-16 rounded-lg object-cover" />
+                                    <img src={movie.image} alt={movie.name} className="w-16 h-16 rounded-lg object-cover mx-auto" />
                                 ) : (
                                     <span className="text-gray-400">No Image</span>
                                 )}
                             </td>
 
-                            <td className="border px-4 py-2 flex justify-center space-x-2 rounded-r-xl">
+                            <td className="border px-4 py-2 text-center align-middle w-32 space-x-2">
                                 <button onClick={() => handleEdit(movie)} className="bg-yellow-500 text-white p-2 rounded">
                                     <FaEdit />
                                 </button>

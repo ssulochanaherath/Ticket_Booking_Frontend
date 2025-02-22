@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import backgroundImage from "../assets/login.jpg";
+import backgroundImage from "../assets/venomblur.jpg";
 import Navbar from "../components/Navbar.tsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -90,7 +90,7 @@ function Movie() {
     };
 
     return (
-        <div style={{ backgroundImage: `url(${backgroundImage})` }} className="min-h-screen bg-cover bg-center">
+        <div style={{ backgroundImage: `url(${backgroundImage})` }} className="min-h-screen bg-cover bg-center backdrop-blur-">
         <Navbar />
 
             <div className="p-6 bg-opacity-0 bg-white rounded-lg mx-auto max-w-screen-xl mt-10">

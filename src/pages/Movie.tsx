@@ -93,11 +93,12 @@ function Movie() {
         <div
             style={{
                 backgroundImage: `url(${backgroundImage})`,
-                backgroundAttachment: "fixed", // This keeps the background image static
+                backgroundAttachment: "fixed",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
+                minHeight: "100vh",
             }}
-            className="min-h-screen"
+            className="relative"
         >
         <Navbar />
 

@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router"
+
 import "./App.css"
 import { RootLayout } from "./components/RootLayout"
 import Customer from "./pages/Customer"
+import Movie from "./pages/Movie"
 //import Item from "./pages/Item"
 //import PlaceOrder from "./pages/PlaceOrder"
 //import Dashboard from "./pages/Dashboard"
@@ -12,8 +14,8 @@ function App() {
             path: "",
             element: <RootLayout />,
             children: [
-                //{ path: "", element: <Dashboard /> },
-                { path: "/", element: <Customer /> },
+                { path: "/", element: <Movie /> },
+                { path: "/customer", element: <Customer /> },
                 //{ path: "/item", element: <Item /> },
                 //{ path: "/place-order", element: <PlaceOrder /> }
             ]

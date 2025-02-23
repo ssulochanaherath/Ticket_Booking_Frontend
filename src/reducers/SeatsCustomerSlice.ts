@@ -38,6 +38,18 @@ export const saveSeatsCustomer = createAsyncThunk(
     }
 );
 
+export const resetSeatsCustomers = createAsyncThunk(
+    "seatsCustomer/resetSeatsCustomers",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await api.delete("/CustomerSeats/reset");
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Failed to reset seats customers");
+        }
+    }
+);
+
 // Create slice for seats customer
 const seatsCustomerSlice = createSlice({
     name: "seatsCustomer",
@@ -58,6 +70,12 @@ const seatsCustomerSlice = createSlice({
             .addCase(saveSeatsCustomer.rejected, (state, action) => {
                 console.error("Error saving seats customer:", action.payload);
             })
+
+            // Reset seats customers
+            .addCase(resetSeatsCustomers.fulfilled, () => [])
+            .addCase(resetSeatsCustomers.rejected, (state, action) => {
+                console.error("Error resetting seats customers:", action.payload);
+            });
     },
 });
 

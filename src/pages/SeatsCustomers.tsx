@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSeatsCustomer, getSeatsCustomers } from '../reducers/SeatsCustomerSlice';
+import {saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers} from '../reducers/SeatsCustomerSlice';
 import Navbar from "../components/Navbar.tsx";
 import { AppDispatch } from "../store/Store.ts";
 import { RootState } from '../store/Store'; // Assuming you have RootState for useSelector
@@ -75,6 +75,18 @@ const SeatsC = () => {
         }
     };
 
+    const handleResetSeats = async () => {
+        if (window.confirm("Are you sure you want to reset all booked seats?")) {
+            try {
+                await dispatch(resetSeatsCustomers());
+                await dispatch(getSeatsCustomers()); // Refresh seat availability
+            } catch (error) {
+                alert('Error resetting seats. Please try again.');
+            }
+        }
+    };
+
+
     // Generate available seats for the dropdown
     const availableSeatsForDropdown = [];
     seatNames.forEach((row) => {
@@ -144,6 +156,13 @@ const SeatsC = () => {
                     <div className="w-6 h-6 bg-blue-950 rounded-full"></div> {/* Reduced size */}
                     <span>Booked</span>
                 </div>
+                <button
+                    onClick={handleResetSeats}
+                    className="mt-4 p-2 bg-red-600 text-white rounded hover:bg-red-500"
+                >
+                    Reset All Bookings
+                </button>
+
             </div>
         </div>
     );

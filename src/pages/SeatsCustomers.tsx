@@ -1,97 +1,86 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { saveSeatsCustomer } from '../reducers/SeatsCustomerSlice';  // Import the saveSeatsCustomer action
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveSeatsCustomer, getSeatsCustomers } from '../reducers/SeatsCustomerSlice';
 import Navbar from "../components/Navbar.tsx";
-import {AppDispatch} from "../store/Store.ts"; // Assuming Navbar is in the same directory
+import { AppDispatch } from "../store/Store.ts";
+import { RootState } from '../store/Store'; // Assuming you have RootState for useSelector
 
 const SeatsC = () => {
     const seatNames = [
-        ['A1', 'A2', 'A3', 'A4', 'A5'],
-        ['B1', 'B2', 'B3', 'B4', 'B5'],
-        ['C1', 'C2', 'C3', 'C4', 'C5'],
-        ['D1', 'D2', 'D3', 'D4', 'D5'],
+        [{ id: 'A1', name: 'A1' }, { id: 'A2', name: 'A2' }, { id: 'A3', name: 'A3' }, { id: 'A4', name: 'A4' }, { id: 'A5', name: 'A5' }],
+        [{ id: 'B1', name: 'B1' }, { id: 'B2', name: 'B2' }, { id: 'B3', name: 'B3' }, { id: 'B4', name: 'B4' }, { id: 'B5', name: 'B5' }],
+        [{ id: 'C1', name: 'C1' }, { id: 'C2', name: 'C2' }, { id: 'C3', name: 'C3' }, { id: 'C4', name: 'C4' }, { id: 'C5', name: 'C5' }],
+        [{ id: 'D1', name: 'D1' }, { id: 'D2', name: 'D2' }, { id: 'D3', name: 'D3' }, { id: 'D4', name: 'D4' }, { id: 'D5', name: 'D5' }],
     ];
 
-    const [seats, setSeats] = useState<boolean[][]>([
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-    ]);
+    const [seats, setSeats] = useState<{ [key: string]: boolean }>({}); // Track availability of seats by ID
+    const [selectedSeat, setSelectedSeat] = useState<string>(''); // Selected seat ID for booking
+    const dispatch = useDispatch<AppDispatch>();
 
-    const [clickedSeats, setClickedSeats] = useState<boolean[][]>([
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-    ]);
+    // Fetch seats customers (available seats) on component mount
+    useEffect(() => {
+        dispatch(getSeatsCustomers());
+    }, [dispatch]);
 
-    const [selectedSeat, setSelectedSeat] = useState<string>(''); // To store the selected seat from dropdown
+    // Get the list of seats from the Redux store
+    const availableSeats = useSelector((state: RootState) => state.seatsCustomers); // Get available seats from Redux
 
-    const dispatch = useDispatch<AppDispatch>();  // Get the dispatch function
-
-    const handleSeatClick = (row: number, col: number) => {
-        setSeats((prevSeats) => {
-            const newSeats = [...prevSeats];
-            newSeats[row][col] = !newSeats[row][col];
-            return newSeats;
+    useEffect(() => {
+        // Update the local seats state based on the fetched data
+        const newSeatsState: { [key: string]: boolean } = {};
+        availableSeats.forEach((seat) => {
+            newSeatsState[seat.name] = true; // Mark seat as booked if it's in the list
         });
-        setClickedSeats((prevClickedSeats) => {
-            const newClickedSeats = [...prevClickedSeats];
-            newClickedSeats[row][col] = true;
-            return newClickedSeats;
-        });
+        setSeats(newSeatsState); // Update the local seat state
+    }, [availableSeats]);
+
+    // Handle seat click to toggle seat selection
+    const handleSeatClick = (seatId: string) => {
+        setSeats((prevSeats) => ({
+            ...prevSeats,
+            [seatId]: !prevSeats[seatId], // Toggle the seat availability
+        }));
     };
 
-    const getSeatColor = (isBooked: boolean, isClicked: boolean) => {
-        if (isClicked) return 'bg-blue-950';
-        return isBooked ? 'bg-red-600' : 'border-gray-400';
-    };
-
-    const handleBookSeat = () => {
+    // Handle seat booking
+    const handleBookSeat = async () => {
         if (!selectedSeat) {
             alert('Please select a seat to book');
             return;
         }
 
-        // Extract row and column from the input seat number
-        const rowLetter = selectedSeat.charAt(0).toUpperCase(); // A, B, C, D
-        const colNumber = parseInt(selectedSeat.slice(1)); // 1, 2, 3, etc.
+        // Check if the seat is already booked
+        if (seats[selectedSeat]) {
+            alert('This seat is already booked');
+            return;
+        }
 
-        // Map the row letter to the corresponding row index
-        const rowIndex = ['A', 'B', 'C', 'D'].indexOf(rowLetter);
-        const colIndex = colNumber - 1; // Convert seat number to 0-indexed
+        const seatCustomer = { name: selectedSeat };
 
-        // Check if the seat is available and within range
-        if (rowIndex >= 0 && rowIndex < seats.length && colIndex >= 0 && colIndex < seats[0].length && !seats[rowIndex][colIndex]) {
-            // Dispatch the action to save the seat customer (booking the seat)
-            const seatCustomer = { name: selectedSeat };  // Example, you can add more details as needed
-            //const seatCustomer = new SeatsCustomerModel(name)
-            dispatch(saveSeatsCustomer(seatCustomer));  // Dispatch action to save
+        try {
+            // Dispatch to save the seat customer
+            await dispatch(saveSeatsCustomer(seatCustomer));
 
-            setSeats((prevSeats) => {
-                const newSeats = [...prevSeats];
-                newSeats[rowIndex][colIndex] = true; // Mark seat as booked
-                return newSeats;
-            });
+            // Fetch the updated list of seats after booking
+            await dispatch(getSeatsCustomers());
 
-            setClickedSeats((prevClickedSeats) => {
-                const newClickedSeats = [...prevClickedSeats];
-                newClickedSeats[rowIndex][colIndex] = true; // Mark seat as clicked
-                return newClickedSeats;
-            });
-        } else {
-            alert('This seat is either already booked or invalid');
+            // Mark the seat as booked locally
+            setSeats((prevSeats) => ({
+                ...prevSeats,
+                [selectedSeat]: true,
+            }));
+
+        } catch (error) {
+            alert('Error booking the seat. Please try again.');
         }
     };
 
-
     // Generate available seats for the dropdown
-    const availableSeats = [];
-    seats.forEach((row, rowIndex) => {
-        row.forEach((isBooked, colIndex) => {
-            if (!isBooked) {
-                availableSeats.push(seatNames[rowIndex][colIndex]);
+    const availableSeatsForDropdown = [];
+    seatNames.forEach((row) => {
+        row.forEach((seat) => {
+            if (!seats[seat.id]) { // Seat is available
+                availableSeatsForDropdown.push(seat.id);
             }
         });
     });
@@ -109,43 +98,19 @@ const SeatsC = () => {
 
                 {/* Seat grid rendering */}
                 <div className="flex justify-between flex-wrap">
-                    <div className="flex flex-col space-y-6 w-full sm:w-1/2">
-                        {seats.slice(0, 2).map((row, rowIndex) => (
-                            <div key={rowIndex} className="flex justify-center space-x-4">
-                                {row.map((isBooked, colIndex) => {
-                                    const seatName = seatNames[rowIndex][colIndex];
-                                    return (
-                                        <button
-                                            key={colIndex}
-                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform ${getSeatColor(isBooked, clickedSeats[rowIndex][colIndex])} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
-                                            onClick={() => handleSeatClick(rowIndex, colIndex)}
-                                        >
-                                            {seatName}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col space-y-6 w-full sm:w-1/2">
-                        {seats.slice(2).map((row, rowIndex) => (
-                            <div key={rowIndex + 2} className="flex justify-center space-x-4">
-                                {row.map((isBooked, colIndex) => {
-                                    const seatName = seatNames[rowIndex + 2][colIndex];
-                                    return (
-                                        <button
-                                            key={colIndex}
-                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform ${getSeatColor(isBooked, clickedSeats[rowIndex + 2][colIndex])} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
-                                            onClick={() => handleSeatClick(rowIndex + 2, colIndex)}
-                                        >
-                                            {seatName}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        ))}
-                    </div>
+                    {seatNames.map((row, rowIndex) => (
+                        <div key={rowIndex} className="flex justify-center space-x-4">
+                            {row.map((seat) => (
+                                <button
+                                    key={seat.id}
+                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-red-600' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
+                                    onClick={() => handleSeatClick(seat.id)}
+                                >
+                                    {seat.name}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
                 </div>
 
                 {/* Seat booking UI */}
@@ -159,7 +124,7 @@ const SeatsC = () => {
                             className="p-2 rounded border-2 border-gray-400"
                         >
                             <option value="">-- Select Seat --</option>
-                            {availableSeats.map((seat) => (
+                            {availableSeatsForDropdown.map((seat) => (
                                 <option key={seat} value={seat}>
                                     {seat}
                                 </option>
@@ -174,7 +139,7 @@ const SeatsC = () => {
                     </button>
                 </div>
 
-                {/* Booked indicator positioned in the top-right corner */}
+                {/* Booked indicator */}
                 <div className="absolute top-28 right-4 flex items-center space-x-2 text-white">
                     <div className="w-6 h-6 bg-blue-950 rounded-full"></div> {/* Reduced size */}
                     <span>Booked</span>

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import {SeatsCustomerModel} from "../models/SeatsCustomerModel.ts";
+import { SeatsCustomerModel } from "../models/SeatsCustomerModel.ts";
 
 // Initial state for the slice
 const initialState: SeatsCustomerModel[] = [];
@@ -12,7 +12,7 @@ const api = axios.create({
 
 // Thunks to handle CRUD operations for SeatsCustomerModel
 
-// Fetch all seats customers
+// Fetch all seats customers (available seats)
 export const getSeatsCustomers = createAsyncThunk(
     "seatsCustomer/getSeatsCustomers",
     async (_, { rejectWithValue }) => {
@@ -28,13 +28,12 @@ export const getSeatsCustomers = createAsyncThunk(
 // Save new seat customer
 export const saveSeatsCustomer = createAsyncThunk(
     "seatsCustomer/saveSeatsCustomer",
-    async (seatsCustomer: SeatsCustomerModel, {  }) => {
+    async (seatsCustomer: SeatsCustomerModel, { rejectWithValue }) => {
         try {
             const response = await api.post("/CustomerSeats/add", seatsCustomer);
-
             return response.data;
         } catch (error: any) {
-            return (error.response?.data || "Failed to save seats customer");
+            return rejectWithValue(error.response?.data || "Failed to save seats customer");
         }
     }
 );
@@ -46,7 +45,7 @@ const seatsCustomerSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // Fetch seats customers
+            // Fetch seats customers (available seats)
             .addCase(getSeatsCustomers.fulfilled, (_, action) => action.payload)
             .addCase(getSeatsCustomers.rejected, (state, action) => {
                 console.error("Error fetching seats customers:", action.payload);

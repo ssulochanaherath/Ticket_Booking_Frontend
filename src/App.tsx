@@ -7,6 +7,7 @@ import Movie from "./pages/Movie"
 import Dashboard from "./pages/Dashboard.tsx";
 import Seats from "./pages/Seats.tsx";
 import SeatsC from "./pages/SeatsCustomers.tsx";
+import Schedules from "./pages/Schedules.tsx";
 //import PlaceOrder from "./pages/PlaceOrder"
 //import Dashboard from "./pages/Dashboard"
 
@@ -20,7 +21,7 @@ function App() {
                 { path: "/films", element: <Movie /> },
                 { path: "/customer", element: <Customer /> },
                 { path: "/seats", element: <Seats /> },
-                { path: "/time-schedules", element: <SeatsC /> }
+                { path: "/time-schedules", element: <Schedules /> }
             ]
         }
     ])

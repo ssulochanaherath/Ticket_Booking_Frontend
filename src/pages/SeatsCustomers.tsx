@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { saveSeatsCustomer } from '../reducers/SeatsCustomerSlice';  // Import the saveSeatsCustomer action
-import Navbar from "../components/Navbar.tsx"; // Assuming Navbar is in the same directory
+import Navbar from "../components/Navbar.tsx";
+import {AppDispatch} from "../store/Store.ts"; // Assuming Navbar is in the same directory
 
 const SeatsC = () => {
     const seatNames = [
@@ -27,7 +28,7 @@ const SeatsC = () => {
 
     const [selectedSeat, setSelectedSeat] = useState<string>(''); // To store the selected seat from dropdown
 
-    const dispatch = useDispatch();  // Get the dispatch function
+    const dispatch = useDispatch<AppDispatch>();  // Get the dispatch function
 
     const handleSeatClick = (row: number, col: number) => {
         setSeats((prevSeats) => {
@@ -65,6 +66,7 @@ const SeatsC = () => {
         if (rowIndex >= 0 && rowIndex < seats.length && colIndex >= 0 && colIndex < seats[0].length && !seats[rowIndex][colIndex]) {
             // Dispatch the action to save the seat customer (booking the seat)
             const seatCustomer = { name: selectedSeat };  // Example, you can add more details as needed
+            //const seatCustomer = new SeatsCustomerModel(name)
             dispatch(saveSeatsCustomer(seatCustomer));  // Dispatch action to save
 
             setSeats((prevSeats) => {
@@ -82,6 +84,7 @@ const SeatsC = () => {
             alert('This seat is either already booked or invalid');
         }
     };
+
 
     // Generate available seats for the dropdown
     const availableSeats = [];

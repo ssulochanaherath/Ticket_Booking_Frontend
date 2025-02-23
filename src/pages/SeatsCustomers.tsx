@@ -181,12 +181,12 @@ const SeatsC = () => {
                     <div className="w-6 h-6 bg-blue-950 rounded-full"></div> {/* Reduced size */}
                     <span>Booked</span>
                 </div>
-                <button
-                    onClick={handleResetSeats}
-                    className="mt-4 p-2 bg-red-600 text-white rounded hover:bg-red-500"
-                >
-                    Reset All Bookings
-                </button>
+                {/*<button*/}
+                {/*    onClick={handleResetSeats}*/}
+                {/*    className="mt-4 p-2 bg-red-600 text-white rounded hover:bg-red-500"*/}
+                {/*>*/}
+                {/*    Reset All Bookings*/}
+                {/*</button>*/}
 
             </div>
         </div>

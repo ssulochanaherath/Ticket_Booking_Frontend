@@ -94,7 +94,7 @@ const SeatsC = () => {
                     {/* Left Side - Rows A & B */}
                     <div className="flex flex-col items-center space-y-10">
                         {seatNames.slice(0, 2).map((row, rowIndex) => (
-                            <div key={rowIndex} className="flex justify-center space-x-4">
+                            <div key={rowIndex} className="flex justify-center space-x-8">
                                 {row.map((seat) => (
                                     <button
                                         key={seat.id}
@@ -113,7 +113,7 @@ const SeatsC = () => {
                     {/* Right Side - Rows C & D */}
                     <div className="flex flex-col items-center space-y-10">
                         {seatNames.slice(2, 4).map((row, rowIndex) => (
-                            <div key={rowIndex} className="flex justify-center space-x-4">
+                            <div key={rowIndex} className="flex justify-center space-x-8">
                                 {row.map((seat) => (
                                     <button
                                         key={seat.id}

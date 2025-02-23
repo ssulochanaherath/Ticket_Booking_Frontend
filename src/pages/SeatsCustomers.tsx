@@ -103,7 +103,7 @@ const SeatsC = () => {
                             {row.map((seat) => (
                                 <button
                                     key={seat.id}
-                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-red-600' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
+                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80`}
                                     onClick={() => handleSeatClick(seat.id)}
                                 >
                                     {seat.name}

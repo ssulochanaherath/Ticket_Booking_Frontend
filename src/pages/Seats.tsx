@@ -1,110 +1,148 @@
-import React, { useState } from 'react';
-import Navbar from "../components/Navbar.tsx"; // Assuming Navbar is in the same directory
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice';
+import Navbar from "../components/Navbar.tsx";
+import { AppDispatch } from "../store/Store.ts";
+import { RootState } from '../store/Store';
+import backgroundImage from '../assets/seats4.jpg';
 
-const Seats = () => {
-    // Custom seat names with an additional seat per row
+const SeatsC = () => {
     const seatNames = [
-        ['A1', 'A2', 'A3', 'A4', 'A5'],
-        ['B1', 'B2', 'B3', 'B4', 'B5'],
-        ['C1', 'C2', 'C3', 'C4', 'C5'],
-        ['D1', 'D2', 'D3', 'D4', 'D5'],
+        [{ id: 'A1', name: 'A1' }, { id: 'A2', name: 'A2' }, { id: 'A3', name: 'A3' }, { id: 'A4', name: 'A4' }, { id: 'A5', name: 'A5' }],
+        [{ id: 'B1', name: 'B1' }, { id: 'B2', name: 'B2' }, { id: 'B3', name: 'B3' }, { id: 'B4', name: 'B4' }, { id: 'B5', name: 'B5' }],
+        [{ id: 'C1', name: 'C1' }, { id: 'C2', name: 'C2' }, { id: 'C3', name: 'C3' }, { id: 'C4', name: 'C4' }, { id: 'C5', name: 'C5' }],
+        [{ id: 'D1', name: 'D1' }, { id: 'D2', name: 'D2' }, { id: 'D3', name: 'D3' }, { id: 'D4', name: 'D4' }, { id: 'D5', name: 'D5' }],
     ];
 
-    // State for seat booking
-    const [seats, setSeats] = useState<boolean[][]>([
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-    ]);
+    const [seats, setSeats] = useState<{ [key: string]: boolean }>({});
+    const [selectedSeat, setSelectedSeat] = useState<string>('');
+    const dispatch = useDispatch<AppDispatch>();
 
-    // State for tracking clicked seats
-    const [clickedSeats, setClickedSeats] = useState<boolean[][]>([
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-    ]);
+    useEffect(() => {
+        dispatch(getSeatsCustomers());
+    }, [dispatch]);
 
-    // Handle seat click
-    const handleSeatClick = (row: number, col: number) => {
-        setSeats((prevSeats) => {
-            const newSeats = [...prevSeats];
-            newSeats[row][col] = !newSeats[row][col]; // Toggle booked status
-            return newSeats;
+    const availableSeats = useSelector((state: RootState) => state.seatsCustomers);
+
+    useEffect(() => {
+        const newSeatsState: { [key: string]: boolean } = {};
+        availableSeats.forEach((seat) => {
+            newSeatsState[seat.name] = true;
         });
-        setClickedSeats((prevClickedSeats) => {
-            const newClickedSeats = [...prevClickedSeats];
-            newClickedSeats[row][col] = true; // Mark seat as clicked
-            return newClickedSeats;
-        });
+        setSeats(newSeatsState);
+    }, [availableSeats]);
+
+    const handleSeatClick = (seatId: string) => {
+        setSeats((prevSeats) => ({
+            ...prevSeats,
+            [seatId]: !prevSeats[seatId],
+        }));
+        setSelectedSeat(seatId); // Automatically set the selected seat when clicked
     };
 
-    // Get seat color based on booking status and click status
-    const getSeatColor = (isBooked: boolean, isClicked: boolean) => {
-        if (isClicked) return 'bg-blue-950'; // Blue when clicked
-        return isBooked ? 'bg-red-600' : 'border-gray-400'; // Red when booked, default border when available
+    const handleBookSeat = async () => {
+        if (!selectedSeat) {
+            alert('Please select a seat to book');
+            return;
+        }
+
+        if (seats[selectedSeat]) {
+            alert('This seat is already booked');
+            return;
+        }
+
+        const seatCustomer = { name: selectedSeat };
+
+        try {
+            await dispatch(saveSeatsCustomer(seatCustomer));
+            await dispatch(getSeatsCustomers());
+
+            setSeats((prevSeats) => ({
+                ...prevSeats,
+                [selectedSeat]: true,
+            }));
+        } catch (error) {
+            alert('Error booking the seat. Please try again.');
+        }
+    };
+
+    const handleResetSeats = async () => {
+        if (window.confirm("Are you sure you want to reset all booked seats?")) {
+            try {
+                await dispatch(resetSeatsCustomers());
+                await dispatch(getSeatsCustomers());
+            } catch (error) {
+                alert('Error resetting seats. Please try again.');
+            }
+        }
     };
 
     return (
-        <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats4.jpg)', backgroundSize: 'cover' }}>
+        <div
+            className="min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+            style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}
+        >
             <Navbar />
-            <div className="mt-8 max-w-screen-lg mx-auto">
-                <div className="relative w-full h-24 bg-gray-800 mx-auto rounded-lg mb-32">
-                    <div className="absolute inset-0 flex justify-center items-center text-white font-bold">
+            <div className="mt-8 max-w-screen-lg mx-auto px-4">
+                <div className="relative w-full h-16 bg-gray-900 mx-auto rounded-lg mb-12 shadow-lg">
+                    <div className="absolute inset-0 flex justify-center items-center text-white font-semibold text-xl">
                         Screen
                     </div>
                 </div>
 
-                <div className="flex justify-between flex-wrap">
-                    <div className="flex flex-col space-y-6 w-full sm:w-1/2">
-                        {seats.slice(0, 2).map((row, rowIndex) => (
+                <div className="flex justify-center items-center space-x-16">
+                    {/* Left Side - Rows A & B */}
+                    <div className="flex flex-col items-center space-y-10">
+                        {seatNames.slice(0, 2).map((row, rowIndex) => (
                             <div key={rowIndex} className="flex justify-center space-x-4">
-                                {row.map((isBooked, colIndex) => {
-                                    const seatName = seatNames[rowIndex][colIndex]; // Use custom seat name here
-                                    return (
-                                        <button
-                                            key={colIndex}
-                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform ${getSeatColor(isBooked, clickedSeats[rowIndex][colIndex])} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
-                                            onClick={() => handleSeatClick(rowIndex, colIndex)}
-                                        >
-                                            {seatName}
-                                        </button>
-                                    );
-                                })}
+                                {row.map((seat) => (
+                                    <button
+                                        key={seat.id}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
+                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
+                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        onClick={() => handleSeatClick(seat.id)}
+                                    >
+                                        {seat.name}
+                                    </button>
+                                ))}
                             </div>
                         ))}
                     </div>
 
-                    <div className="flex flex-col space-y-6 w-full sm:w-1/2">
-                        {seats.slice(2).map((row, rowIndex) => (
-                            <div key={rowIndex + 2} className="flex justify-center space-x-4">
-                                {row.map((isBooked, colIndex) => {
-                                    const seatName = seatNames[rowIndex + 2][colIndex]; // Use custom seat name here
-                                    return (
-                                        <button
-                                            key={colIndex}
-                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform ${getSeatColor(isBooked, clickedSeats[rowIndex + 2][colIndex])} text-white font-semibold hover:scale-110 hover:opacity-80 bg-transparent`}
-                                            onClick={() => handleSeatClick(rowIndex + 2, colIndex)}
-                                        >
-                                            {seatName}
-                                        </button>
-                                    );
-                                })}
+                    {/* Right Side - Rows C & D */}
+                    <div className="flex flex-col items-center space-y-10">
+                        {seatNames.slice(2, 4).map((row, rowIndex) => (
+                            <div key={rowIndex} className="flex justify-center space-x-4">
+                                {row.map((seat) => (
+                                    <button
+                                        key={seat.id}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
+                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
+                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        onClick={() => handleSeatClick(seat.id)}
+                                    >
+                                        {seat.name}
+                                    </button>
+                                ))}
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="mt-4 text-center">
-                    <div className="flex justify-center space-x-4 text-white">
-                        <div className="w-8 h-8 bg-blue-950 rounded-full"></div>
-                        <span>Booked</span>
-                    </div>
+
+
+                <div className="flex justify-center items-center mt-6">
+                    <button
+                        onClick={handleResetSeats}
+                        className="p-3 bg-red-600 text-white rounded-full text-lg hover:bg-red-500 transition duration-200 transform hover:scale-105 mt-16"
+                    >
+                        Reset All Bookings
+                    </button>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Seats;
+export default SeatsC;

@@ -109,21 +109,46 @@ const SeatsC = () => {
                 </div>
 
                 {/* Seat grid rendering */}
-                <div className="flex justify-between flex-wrap">
-                    {seatNames.map((row, rowIndex) => (
-                        <div key={rowIndex} className="flex justify-center space-x-4">
-                            {row.map((seat) => (
-                                <button
-                                    key={seat.id}
-                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80`}
-                                    onClick={() => handleSeatClick(seat.id)}
-                                >
-                                    {seat.name}
-                                </button>
-                            ))}
-                        </div>
-                    ))}
+                <div className="flex justify-center items-center space-x-16">
+                    {/* Left Side - Rows A & B */}
+                    <div className="flex flex-col items-center space-y-10">
+                        {seatNames.slice(0, 2).map((row, rowIndex) => (
+                            <div key={rowIndex} className="flex justify-center space-x-6">
+                                {row.map((seat) => (
+                                    <button
+                                        key={seat.id}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
+                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
+                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        onClick={() => handleSeatClick(seat.id)}
+                                    >
+                                        {seat.name}
+                                    </button>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Right Side - Rows C & D */}
+                    <div className="flex flex-col items-center space-y-10">
+                        {seatNames.slice(2, 4).map((row, rowIndex) => (
+                            <div key={rowIndex} className="flex justify-center space-x-6">
+                                {row.map((seat) => (
+                                    <button
+                                        key={seat.id}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
+                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
+                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        onClick={() => handleSeatClick(seat.id)}
+                                    >
+                                        {seat.name}
+                                    </button>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
 
                 {/* Seat booking UI */}
                 <div className="mt-6 text-center">

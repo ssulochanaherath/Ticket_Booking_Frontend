@@ -98,7 +98,7 @@ const SeatsC = () => {
     });
 
     return (
-        <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats4.jpg)', backgroundSize: 'cover' }}>
+        <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats.jpg)', backgroundSize: 'cover' }}>
             <Navbar />
             <div className="mt-8 max-w-screen-lg mx-auto">
                 {/* Screen indicator */}

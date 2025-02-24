@@ -4,7 +4,7 @@ import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../re
 import Navbar from "../components/Navbar.tsx";
 import { AppDispatch } from "../store/Store.ts";
 import { RootState } from '../store/Store';
-import backgroundImage from '../assets/seats4.jpg';
+import backgroundImage from '../assets/seats.jpg';
 
 const SeatsC = () => {
     const seatNames = [

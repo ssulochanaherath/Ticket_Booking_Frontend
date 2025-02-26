@@ -4,7 +4,9 @@ import NavbarC from "../components/NavbarC.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { getMovies } from "../reducers/MovieSlice"; // Import your action
 import { RootState } from "../store/Store"; // Import your store's RootState
-import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice'; // Import seat actions
+import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FaFilm, FaTicketAlt, FaUser, FaCheckCircle} from "react-icons/fa"; // Import seat actions
 
 function BuyTickets() {
     const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
@@ -154,34 +156,43 @@ function BuyTickets() {
         <div className="relative w-full min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col">
             <div className="fixed top-0 left-0 w-full h-full z-[-1] bg-gradient-to-b from-gray-900 to-black"></div>
             <NavbarC />
-            <div className="flex flex-col items-stretch justify-between flex-grow mt-4 p-8">
+            <div className="flex flex-col items-stretch justify-between flex-grow mt-1 p-8">
                 {/* Step Navigation with Text */}
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between mb-6">
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${step === 1 ? "text-blue-400" : "text-gray-400"}`}
-                        onClick={() => setStep(1)} // Navigate to step 1
+                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
+        ${step === 1 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                        onClick={() => setStep(1)}
                     >
-                        Select Movie
+                        <FaFilm size={24} className="mb-2" />
+                        <span>Select Movie</span>
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${step === 2 ? "text-blue-400" : "text-gray-400"}`}
-                        onClick={() => setStep(2)} // Navigate to step 2
+                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
+        ${step === 2 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                        onClick={() => setStep(2)}
                     >
-                        Book Seat
+                        <FaTicketAlt size={24} className="mb-2" />
+                        <span>Book Seat</span>
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${step === 3 ? "text-blue-400" : "text-gray-400"}`}
-                        onClick={() => setStep(3)} // Navigate to step 3
+                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
+        ${step === 3 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                        onClick={() => setStep(3)}
                     >
-                        Customer Details
+                        <FaUser size={24} className="mb-2" />
+                        <span>Customer Details</span>
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${step === 4 ? "text-blue-400" : "text-gray-400"}`}
-                        onClick={() => setStep(4)} // Navigate to step 4
+                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
+        ${step === 4 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                        onClick={() => setStep(4)}
                     >
-                        Summary
+                        <FaCheckCircle size={24} className="mb-2" />
+                        <span>Summary</span>
                     </div>
                 </div>
+
 
                 {/* Steps Content */}
 
@@ -325,18 +336,18 @@ function BuyTickets() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="w-full p-6 rounded-xl shadow-xl flex-grow bg-gray-800 max-w-md mx-auto"
+                        className="w-full p-8 rounded-2xl shadow-2xl flex-grow bg-gray-900 max-w-lg mx-auto"
                     >
-                        <h2 className="text-3xl font-bold mb-6 text-center text-white">Enter your Details</h2>
+                        <h2 className="text-4xl font-semibold text-center text-white mb-8">Enter Your Details</h2>
 
                         {/* Customer Information Form */}
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <input
                                 type="email"
                                 value={customerEmail}
                                 onChange={(e) => setCustomerEmail(e.target.value)}
                                 placeholder="Enter your email"
-                                className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
+                                className="w-full p-5 rounded-lg bg-transparent border-2 border-gray-700 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow-xl transition-all"
                                 required
                             />
                             <input
@@ -344,16 +355,16 @@ function BuyTickets() {
                                 value={customerPhone}
                                 onChange={(e) => setCustomerPhone(e.target.value)}
                                 placeholder="Enter your phone number"
-                                className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
+                                className="w-full p-5 rounded-lg bg-transparent border-2 border-gray-700 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow-xl transition-all"
                                 required
                             />
                         </div>
 
                         {/* Submit Button */}
-                        <div className="mt-6 text-center">
+                        <div className="mt-8 text-center">
                             <button
                                 onClick={handleSubmit}  // Replace with your form submission handler
-                                className="w-[50%] p-4 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg shadow-lg hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-2/3 py-4 px-6 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-semibold rounded-full shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 Submit
                             </button>
@@ -361,31 +372,33 @@ function BuyTickets() {
                     </motion.div>
                 )}
 
+
                 {/*Step 04*/}
                 {step === 4 && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="w-full bg-white p-8 rounded-3xl shadow-xl flex-grow text-center max-w-lg mx-auto"
+                        className="w-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-10 rounded-3xl shadow-2xl flex-grow text-center max-w-lg mx-auto"
                     >
-                        <h2 className="text-3xl font-semibold text-gray-800 mb-8">🎬 Booking Summary</h2>
+                        <h2 className="text-4xl font-semibold text-white mb-8">🎬 Booking Summary</h2>
 
-                        <div className="text-lg text-gray-700 space-y-6">
-                            <p><strong className="font-medium">🎥 Movie:</strong> {selectedMovie || "Not selected"}</p>
-                            <p><strong className="font-medium">🍿 Seats:</strong> {selectedSeats.length > 0 ? selectedSeats.join(", ") : "No seats selected"}</p>
-                            <p><strong className="font-medium">📧 Email:</strong> {customerData.email || "Not provided"}</p>
-                            <p><strong className="font-medium">📱 Phone:</strong> {customerData.phone || "Not provided"}</p>
+                        <div className="text-xl text-gray-300 space-y-6">
+                            <p><strong className="font-medium text-gray-100">🎥 Movie:</strong> {selectedMovie || "Not selected"}</p>
+                            <p><strong className="font-medium text-gray-100">🍿 Seats:</strong> {selectedSeats.length > 0 ? selectedSeats.join(", ") : "No seats selected"}</p>
+                            <p><strong className="font-medium text-gray-100">📧 Email:</strong> {customerData.email || "Not provided"}</p>
+                            <p><strong className="font-medium text-gray-100">📱 Phone:</strong> {customerData.phone || "Not provided"}</p>
                         </div>
 
                         <button
                             onClick={handleFinalBooking}
-                            className="mt-8 px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="mt-8 px-10 py-4 bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold rounded-full shadow-xl transform transition-all hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-green-600"
                         >
                             ✅ Confirm Booking
                         </button>
                     </motion.div>
                 )}
+
             </div>
         </div>
     );

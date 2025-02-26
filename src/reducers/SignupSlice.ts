@@ -8,6 +8,7 @@ const initialState = {
     role: 'User',
     error: '',
     loading: false,
+    success: false,  // Add success field to the state
 };
 
 const api = axios.create({
@@ -28,7 +29,6 @@ export const signupUser = createAsyncThunk(
         }
     }
 );
-
 
 // Reducer slice for signup actions
 const signupSlice = createSlice({
@@ -57,12 +57,14 @@ const signupSlice = createSlice({
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = '';
+                state.success = true;  // Set success to true when signup is successful
                 console.log('Signup successful:', action.payload);
             })
             // ✅ Signup rejected (failure)
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+                state.success = false;  // Set success to false when signup fails
                 console.error('Signup failed:', action.payload);
             })
             // ✅ Signup pending (loading)

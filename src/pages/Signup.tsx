@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import signupImage from '../assets/login.jpg';
@@ -8,7 +8,7 @@ import { AppDispatch } from "../store/Store";
 
 function Signup() {
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, error: reduxError } = useSelector((state) => state.signup); // Select loading and error from state
+    const { loading, error: reduxError, success } = useSelector((state) => state.signup); // Select loading, error, and success from state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('User');
@@ -24,8 +24,15 @@ function Signup() {
 
         // Create new SignupModel instance and dispatch to Redux
         const newSignup = new SignupModel(email, password, role);
-        dispatch(signupUser(newSignup));
+        dispatch(signupUser(newSignup)); // Dispatch signup action
     };
+
+    useEffect(() => {
+        if (success) {
+            // Navigate to the login page when signup is successful
+            navigate('/');  // Redirect to the login page
+        }
+    }, [success, navigate]);  // Trigger when success changes
 
     return (
         <div

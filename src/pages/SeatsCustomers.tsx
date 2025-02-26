@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers} from '../reducers/SeatsCustomerSlice';
-import Navbar from "../components/Navbar.tsx";
 import { AppDispatch } from "../store/Store.ts";
-import { RootState } from '../store/Store'; // Assuming you have RootState for useSelector
+import { RootState } from '../store/Store';
+import NavbarC from "../components/NavbarC.tsx"; // Assuming you have RootState for useSelector
 
 const SeatsC = () => {
     const seatNames = [
@@ -99,7 +99,7 @@ const SeatsC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats.jpg)', backgroundSize: 'cover' }}>
-            <Navbar />
+            <NavbarC />
             <div className="mt-8 max-w-screen-lg mx-auto">
                 {/* Screen indicator */}
                 <div className="relative w-full h-16 bg-gray-800 mx-auto rounded-lg mb-12">

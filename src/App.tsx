@@ -25,7 +25,9 @@ function App() {
                 { path: "/customer", element: <Customer /> },
                 { path: "/seats", element: <Seats /> },
                 { path: "/time-schedules", element: <Schedules /> },
-                { path: "/dashboardc", element: <DashboardC /> }
+
+                { path: "/dashboardc", element: <DashboardC /> },
+                { path: "/seatsc", element: <SeatsC /> },
             ]
         }
     ])

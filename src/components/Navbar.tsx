@@ -8,7 +8,7 @@ function Navbar() {
 
     // Define colors for different pages
     const navbarColors = {
-        '/dashboard': 'bg-transparent p-4',
+        '/dashboard': 'bg-gradient-to-r from-black to-blue-950',
         '/films': 'bg-transparent p-4',
         '/customer': 'bg-transparent p-4',
         '/seats': 'bg-transparent p-4',

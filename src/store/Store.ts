@@ -3,13 +3,15 @@ import CustomerSlice from "../reducers/CustomerSlice.ts";
 import MovieSlice from "../reducers/MovieSlice.ts";
 import SeatsCustomerSlice from "../reducers/SeatsCustomerSlice.ts";
 import ScheduleSlice from "../reducers/ScheduleSlice.ts";
-//import ItemSlice from "../reducers/ItemSlice.ts";
+import SignupSlice from "../reducers/SignupSlice.ts";
+
 
 const rootReducer = combineReducers({
     customers: CustomerSlice,
     movies: MovieSlice,
     seatsCustomers: SeatsCustomerSlice,
-    schedules: ScheduleSlice
+    schedules: ScheduleSlice,
+    signup: SignupSlice
 
 })
 

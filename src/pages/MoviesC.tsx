@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import backgroundImage from "../assets/venomblur.jpg";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import backgroundImage from "../assets/venomblur.jpg";
 import { getMovies } from "../reducers/MovieSlice";
 import { MovieModel } from "../models/MovieModel";
 import { AppDispatch } from "../store/Store.ts";
@@ -41,25 +42,27 @@ function Movie() {
                                 className="relative group w-full max-w-xs mx-auto transition-all duration-300 hover:scale-105"
                             >
                                 {/* Image Container */}
-                                <div className="w-full h-[350px] bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform duration-300 transform group-hover:scale-105">
-                                    {movie.image ? (
-                                        <img
-                                            src={movie.image}
-                                            alt={movie.name}
-                                            className="w-full h-full object-cover rounded-lg"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-600 flex justify-center items-center text-white rounded-lg">
-                                            No Image
+                                <Link to={`/buyTickets?id=${movie.id}`} className="block">
+                                    <div className="w-full h-[350px] bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-transform duration-300 transform group-hover:scale-105">
+                                        {movie.image ? (
+                                            <img
+                                                src={movie.image}
+                                                alt={movie.name}
+                                                className="w-full h-full object-cover rounded-lg"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-600 flex justify-center items-center text-white rounded-lg">
+                                                No Image
+                                            </div>
+                                        )}
+                                        {/* Movie Name (Inside Image) */}
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center py-2 px-3">
+                                            <span className="text-sm sm:text-base md:text-lg font-semibold truncate block w-full">
+                                                {movie.name}
+                                            </span>
                                         </div>
-                                    )}
-                                    {/* Movie Name (Inside Image) */}
-                                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center py-2 px-3">
-                                        <span className="text-sm sm:text-base md:text-lg font-semibold truncate block w-full">
-                                            {movie.name}
-                                        </span>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
                         ))
                     ) : (

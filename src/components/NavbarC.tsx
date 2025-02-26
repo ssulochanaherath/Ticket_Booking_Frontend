@@ -15,7 +15,7 @@ function Navbar() {
     const navbarColors = {
         '/dashboard': 'bg-transparent p-4',
         '/filmsC': 'bg-transparent p-4',
-        '/seatsC': 'bg-transparent p-4',
+        '/buyTickets': 'bg-transparent p-4',
     };
 
     // Get the color based on the current path or use a default
@@ -61,10 +61,10 @@ function Navbar() {
                         Films
                     </NavLink>
                     <NavLink
-                        to="/seatsC"
+                        to="/buyTickets"
                         className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
                     >
-                        Seats
+                        Buy Tickets
                     </NavLink>
 
                     {/* Sign Out Button */}

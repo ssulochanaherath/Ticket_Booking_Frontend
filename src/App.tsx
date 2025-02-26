@@ -12,6 +12,7 @@ import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import DashboardC from "./pages/DashboardC.tsx";
 import MoviesC from "./pages/MoviesC.tsx";
+import BuyTickets from "./pages/BuyTickets.tsx";
 
 function App() {
     const routes = createBrowserRouter([
@@ -30,6 +31,7 @@ function App() {
                 { path: "/dashboardc", element: <DashboardC /> },
                 { path: "/filmsc", element: <MoviesC /> },
                 { path: "/seatsc", element: <SeatsC /> },
+                { path: "/buyTickets", element: <BuyTickets /> }
             ]
         }
     ])

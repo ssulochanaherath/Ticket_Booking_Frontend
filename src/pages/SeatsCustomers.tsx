@@ -176,7 +176,7 @@ const SeatsC = () => {
                 </div>
 
                 {/* Booked indicator */}
-                <div className="absolute top-28 right-4 flex items-center space-x-2 text-white z-20">
+                <div className="absolute bottom-4 left-4 flex items-center space-x-2 text-white z-20">
                     <div className="w-6 h-6 bg-blue-950 rounded-full"></div>
                     <span>Booked</span>
                 </div>

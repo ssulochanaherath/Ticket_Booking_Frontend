@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="relative w-full h-screen bg-gray-900">
-            <NavbarC />
+            <NavbarC className="bg-transparent" />
             <div className="relative w-full h-full overflow-hidden">
                 {/* Movie Posters Carousel with Smooth Transition */}
                 {moviePosters.map((poster, index) => (

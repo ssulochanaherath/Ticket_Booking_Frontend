@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
             setCurrentIndex((prevIndex) =>
                 prevIndex === moviePosters.length - 1 ? 0 : prevIndex + 1
             );
-        }, 3000); // Change image every 3 seconds
+        }, 4000); // Change image every 4 seconds
         return () => clearInterval(interval);
     }, []);
 
@@ -28,12 +28,12 @@ const Dashboard: React.FC = () => {
         <div className="page-container">
             <NavbarC />
             <div className="relative w-full h-[585px] overflow-hidden">
-                {/* Movie Posters Carousel */}
+                {/* Movie Posters Carousel with Smooth Transition */}
                 {moviePosters.map((poster, index) => (
                     <div
                         key={index}
-                        className={`absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ${
-                            index === currentIndex ? 'opacity-100' : 'opacity-0'
+                        className={`absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out ${
+                            index === currentIndex ? 'opacity-100 scale-105' : 'opacity-0 scale-95'
                         }`}
                         style={{ backgroundImage: `url(${poster.image})` }}
                     >
@@ -41,14 +41,18 @@ const Dashboard: React.FC = () => {
                     </div>
                 ))}
 
-                {/* Current Movie Title */}
-                <div className="absolute top-[70%] left-1/2 transform -translate-x-1/2 z-10 text-white text-3xl font-bold">
+                {/* Current Movie Title with Styling */}
+                <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 z-10 text-white text-4xl font-extrabold shadow-lg">
                     {moviePosters[currentIndex].title}
                 </div>
 
-                {/* Movie Description */}
-                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 text-white text-lg font-semibold text-center px-4">
-                    {moviePosters[currentIndex].description}
+                {/* Movie Description with Smooth Appearance */}
+                <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-10 text-white text-xl font-semibold text-center px-4">
+                    <p>{moviePosters[currentIndex].description}</p>
+                    {/* Optional CTA button */}
+                    <button className="mt-4 px-6 py-2 bg-yellow-500 text-black font-semibold rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-yellow-600">
+                        Watch Now
+                    </button>
                 </div>
             </div>
         </div>

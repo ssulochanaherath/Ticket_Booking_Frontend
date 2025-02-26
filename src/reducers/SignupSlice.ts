@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { SignupModel } from '../models/SignupModel';
 import axios from 'axios';
 
-// Initial state for the signup process
 const initialState = {
     email: '',
     password: '',
@@ -11,9 +10,8 @@ const initialState = {
     loading: false,
 };
 
-// Axios instance for API calls
 const api = axios.create({
-    baseURL: 'http://localhost:3000/', // Replace with your backend API URL
+    baseURL: 'http://localhost:3000',  // Ensure backend is running on this URL
 });
 
 // ✅ Async thunk for signup
@@ -21,13 +19,16 @@ export const signupUser = createAsyncThunk(
     'signup/signupUser',
     async (user: SignupModel, { rejectWithValue }) => {
         try {
-            const response = await api.post('/auth/signup', user); // Replace with your signup endpoint
-            return response.data; // Assuming the backend returns the user or some success message
+            console.log('Sending user data:', user);  // Log to see the data
+            const response = await api.post('/User/add', user); // Ensure correct endpoint and format
+            return response.data;
         } catch (error: any) {
+            console.error('Error signing up:', error);  // Log error details
             return rejectWithValue(error.response?.data || 'Failed to signup');
         }
     }
 );
+
 
 // Reducer slice for signup actions
 const signupSlice = createSlice({
@@ -56,7 +57,6 @@ const signupSlice = createSlice({
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = '';
-                // You can add the logic to store the user's data after signup or navigate somewhere
                 console.log('Signup successful:', action.payload);
             })
             // ✅ Signup rejected (failure)

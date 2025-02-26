@@ -1,23 +1,30 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import signupImage from '../assets/login.jpg'; // Import your background image
+import { useDispatch, useSelector } from 'react-redux';
+import signupImage from '../assets/login.jpg';
+import { SignupModel } from "../models/SignupModel";
+import { signupUser } from "../reducers/SignupSlice";
+import { AppDispatch } from "../store/Store";
 
 function Signup() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, error: reduxError } = useSelector((state) => state.signup); // Select loading and error from state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('User');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (email === '' || password === '' || role === '') {
-            setError('All fields are required.');
-        } else {
-            setError('');
-            console.log('Signing up with:', email, password, role);
-            navigate('/dashboard');
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();  // Prevent the default form submission
+        if (!email || !password || !role) {
+            setError("All fields are required!");  // Update local error state
+            return;
         }
+
+        // Create new SignupModel instance and dispatch to Redux
+        const newSignup = new SignupModel(email, password, role);
+        dispatch(signupUser(newSignup));
     };
 
     return (
@@ -27,7 +34,7 @@ function Signup() {
         >
             <div className="bg-transparent p-10 rounded-xl shadow-lg w-full sm:w-96 backdrop-blur-md">
                 <h2 className="text-3xl font-extrabold text-center text-white mb-6">Sign Up</h2>
-                {error && <p className="text-red-400 text-center mb-4">{error}</p>}
+                {(error || reduxError) && <p className="text-red-400 text-center mb-4">{error || reduxError}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
@@ -69,8 +76,9 @@ function Signup() {
                     <button
                         type="submit"
                         className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+                        disabled={loading} // Disable button when loading
                     >
-                        Sign Up
+                        {loading ? 'Signing up...' : 'Sign Up'}
                     </button>
                 </form>
                 <div className="mt-4 text-center text-sm">

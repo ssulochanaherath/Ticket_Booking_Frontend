@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import NavbarC from "../components/NavbarC.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import { getMovies } from "../reducers/MovieSlice"; // Import your action to fetch movies
 
 function BuyTickets() {
     const [step, setStep] = useState(1);
@@ -11,44 +13,46 @@ function BuyTickets() {
         email: "",
     });
 
-    const movies = ["Movie A", "Movie B", "Movie C"];
+    const dispatch = useDispatch();
+
+    // Select movies from the Redux store
+    const movies = useSelector((state) => state.movie?.movies); // Check for state.movie before accessing movies
+    const loading = useSelector((state) => state.movie?.loading); // Check for state.movie before accessing loading
+
+    useEffect(() => {
+        // Dispatch the action to fetch movies when the component mounts
+        dispatch(getMovies());
+    }, [dispatch]);
+
     const seats = ["A1", "A2", "B1", "B2"];
 
     return (
         <div className="w-full min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col">
             <NavbarC />
-            <div className="flex flex-col items-stretch justify-between flex-grow mt-12 p-8">
+            <div className="flex flex-col items-stretch justify-between flex-grow mt-4 p-8">
                 {/* Step Navigation with Text */}
-                <div className="flex justify-between mb-6">
+                <div className="flex justify-between mb-4">
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${
-                            step === 1 ? "text-blue-400" : "text-gray-400"
-                        }`}
-                        onClick={() => setStep(1)} // Navigate to step 1
+                        className={`cursor-pointer text-lg font-semibold ${step === 1 ? "text-blue-400" : "text-gray-400"}`}
+                        onClick={() => setStep(1)}
                     >
                         Select Movie
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${
-                            step === 2 ? "text-blue-400" : "text-gray-400"
-                        }`}
-                        onClick={() => setStep(2)} // Navigate to step 2
+                        className={`cursor-pointer text-lg font-semibold ${step === 2 ? "text-blue-400" : "text-gray-400"}`}
+                        onClick={() => setStep(2)}
                     >
                         Book Seat
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${
-                            step === 3 ? "text-blue-400" : "text-gray-400"
-                        }`}
-                        onClick={() => setStep(3)} // Navigate to step 3
+                        className={`cursor-pointer text-lg font-semibold ${step === 3 ? "text-blue-400" : "text-gray-400"}`}
+                        onClick={() => setStep(3)}
                     >
                         Customer Details
                     </div>
                     <div
-                        className={`cursor-pointer text-lg font-semibold ${
-                            step === 4 ? "text-blue-400" : "text-gray-400"
-                        }`}
-                        onClick={() => setStep(4)} // Navigate to step 4
+                        className={`cursor-pointer text-lg font-semibold ${step === 4 ? "text-blue-400" : "text-gray-400"}`}
+                        onClick={() => setStep(4)}
                     >
                         Summary
                     </div>
@@ -66,19 +70,27 @@ function BuyTickets() {
                         <>
                             <h2 className="text-2xl font-bold mb-4 text-center">Choose a Movie</h2>
                             <div className="space-y-3">
-                                {movies.map((movie, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setSelectedMovie(movie)}
-                                        className={`w-full px-5 py-3 rounded-lg transition-all ${
-                                            selectedMovie === movie
-                                                ? "bg-blue-500 text-white shadow-lg"
-                                                : "bg-gray-700 hover:bg-gray-600"
-                                        }`}
-                                    >
-                                        {movie}
-                                    </button>
-                                ))}
+                                {loading ? (
+                                    <p className="text-center">Loading movies...</p>
+                                ) : (
+                                    Array.isArray(movies) && movies.length > 0 ? (
+                                        movies.map((movie, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => setSelectedMovie(movie)}
+                                                className={`w-full px-5 py-3 rounded-lg transition-all ${
+                                                    selectedMovie === movie
+                                                        ? "bg-blue-500 text-white shadow-lg"
+                                                        : "bg-gray-700 hover:bg-gray-600"
+                                                }`}
+                                            >
+                                                {movie.name} {/* Assuming movie is an object with a name property */}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <p className="text-center">No movies available</p>
+                                    )
+                                )}
                             </div>
                             <motion.button
                                 onClick={() => setStep(2)}

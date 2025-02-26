@@ -25,9 +25,9 @@ const Dashboard: React.FC = () => {
     }, []);
 
     return (
-        <div className="page-container">
+        <div className="relative w-full h-screen bg-gray-900">
             <NavbarC />
-            <div className="relative w-full h-[585px] overflow-hidden">
+            <div className="relative w-full h-full overflow-hidden">
                 {/* Movie Posters Carousel with Smooth Transition */}
                 {moviePosters.map((poster, index) => (
                     <div
@@ -37,23 +37,25 @@ const Dashboard: React.FC = () => {
                         }`}
                         style={{ backgroundImage: `url(${poster.image})` }}
                     >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                     </div>
                 ))}
 
-                {/* Current Movie Title with Styling */}
-                <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 z-10 text-white text-4xl font-extrabold shadow-lg">
+                {/* Current Movie Title */}
+                <div className="absolute top-[50%] left-1/2 transform -translate-x-1/2 z-10 text-white text-5xl font-extrabold drop-shadow-lg text-center px-6">
                     {moviePosters[currentIndex].title}
                 </div>
 
-                {/* Movie Description with Smooth Appearance */}
-                <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-10 text-white text-xl font-semibold text-center px-4">
+                {/* Movie Description */}
+                <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 text-white text-lg md:text-xl font-semibold text-center px-4">
                     <p>{moviePosters[currentIndex].description}</p>
-                    {/* Optional CTA button */}
-                    <button className="mt-4 px-6 py-2 bg-yellow-500 text-black font-semibold rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-yellow-600">
-                        Watch Now
+                    <button className="mt-6 px-8 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-yellow-600 focus:outline-none">
+                        Available Movies
                     </button>
                 </div>
+
+                {/* Bottom Gradient Effect */}
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black via-transparent to-transparent"></div>
             </div>
         </div>
     );

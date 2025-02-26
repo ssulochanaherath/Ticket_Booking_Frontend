@@ -15,7 +15,7 @@ function Navbar() {
     const navbarColors = {
         '/dashboard': 'bg-transparent p-4',
         '/filmsC': 'bg-transparent p-4',
-        '/buyTickets': 'bg-transparent p-4',
+        '/buyTickets': 'bg-gradient-to-r from-gray-900 to-black p-4',
     };
 
     // Get the color based on the current path or use a default

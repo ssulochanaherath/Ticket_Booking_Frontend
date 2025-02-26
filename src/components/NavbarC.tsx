@@ -12,8 +12,8 @@ function Navbar() {
     // Define colors for different pages
     const navbarColors = {
         '/dashboard': 'bg-transparent p-4',
-        '/films': 'bg-transparent p-4',
-        '/seats': 'bg-transparent p-4'
+        '/filmsC': 'bg-transparent p-4',
+        '/seatsC': 'bg-transparent p-4'
     };
 
     // Get the color based on the current path or use a default
@@ -50,7 +50,7 @@ function Navbar() {
                     <NavLink to="/dashboardC" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
                         Dashboard
                     </NavLink>
-                    <NavLink to="/films" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
+                    <NavLink to="/filmsC" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
                         Films
                     </NavLink>
                     <NavLink to="/seatsC" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>

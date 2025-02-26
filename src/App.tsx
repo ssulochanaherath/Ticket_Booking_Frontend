@@ -11,6 +11,7 @@ import Schedules from "./pages/Schedules.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import DashboardC from "./pages/DashboardC.tsx";
+import MoviesC from "./pages/MoviesC.tsx";
 
 function App() {
     const routes = createBrowserRouter([
@@ -27,6 +28,7 @@ function App() {
                 { path: "/time-schedules", element: <Schedules /> },
 
                 { path: "/dashboardc", element: <DashboardC /> },
+                { path: "/filmsc", element: <MoviesC /> },
                 { path: "/seatsc", element: <SeatsC /> },
             ]
         }

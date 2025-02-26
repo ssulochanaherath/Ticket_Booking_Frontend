@@ -212,21 +212,66 @@ function BuyTickets() {
 
                     {/*Step 02*/}
 
-                    <motion.div key={step} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow">
+                    <motion.div
+                        key={step}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="w-full bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col items-center"
+                    >
                         {step === 2 && (
                             <>
-                                <h2 className="text-2xl font-bold mb-4 text-center">Choose a Seat</h2>
-                                {/* Seat Grid */}
-                                <div className="flex justify-center items-center space-x-16">
+                                <h2 className="text-3xl font-bold mb-6 text-center text-white">Choose a Seat</h2>
+
+                                {/* Screen Indicator */}
+                                <div className="w-[90%] h-10 bg-gray-700 rounded-t-lg flex items-center justify-center mb-8">
+                                    <span className="text-gray-200 text-lg font-semibold">SCREEN</span>
+                                </div>
+
+                                {/* Seat Layout */}
+                                <div className="flex justify-center items-center space-x-20">
+                                    {/* Left Side (Rows A & B) */}
                                     <div className="flex flex-col items-center space-y-10">
-                                        {['A', 'B', 'C', 'D'].map((row, rowIndex) => (
+                                        {['A', 'B'].map((row, rowIndex) => (
                                             <div key={rowIndex} className="flex justify-center space-x-6">
                                                 {[1, 2, 3, 4, 5].map((seatIndex) => {
                                                     const seatId = `${row}${seatIndex}`;
                                                     return (
                                                         <button
                                                             key={seatId}
-                                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seatId] ? 'bg-blue-950' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform 
+                                            ${
+                                                                seats[seatId]
+                                                                    ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                                    : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
+                                                            } 
+                                            text-white font-semibold`}
+                                                            onClick={() => handleSeatClick(seatId)}
+                                                        >
+                                                            {seatId}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Right Side (Rows C & D) */}
+                                    <div className="flex flex-col items-center space-y-10">
+                                        {['C', 'D'].map((row, rowIndex) => (
+                                            <div key={rowIndex} className="flex justify-center space-x-6">
+                                                {[1, 2, 3, 4, 5].map((seatIndex) => {
+                                                    const seatId = `${row}${seatIndex}`;
+                                                    return (
+                                                        <button
+                                                            key={seatId}
+                                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform 
+                                            ${
+                                                                seats[seatId]
+                                                                    ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                                    : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
+                                                            } 
+                                            text-white font-semibold`}
                                                             onClick={() => handleSeatClick(seatId)}
                                                         >
                                                             {seatId}
@@ -238,21 +283,19 @@ function BuyTickets() {
                                     </div>
                                 </div>
 
-                                {/* Selected Seats Input */}
+                                {/* Selected Seats Input & Booking Button */}
                                 <div className="mt-12 text-center">
-                                    <div className="mb-6">
-                                        <input
-                                            id="seatInput"
-                                            type="text"
-                                            value={selectedSeats}
-                                            readOnly
-                                            className="p-4 h-2 w-50px max-w-md rounded-lg border-2 border-gray-300 bg-gray-800 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-md"
-                                            placeholder="Click seats to select"
-                                        />
-                                    </div>
+                                    <input
+                                        id="seatInput"
+                                        type="text"
+                                        value={selectedSeats}
+                                        readOnly
+                                        className="p-2 w-[90%] max-w-[400px] rounded-lg border-2 border-gray-500 bg-gray-800 text-white text-lg text-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Click seats to select"
+                                    />
                                     <button
                                         onClick={handleBookSeats}
-                                        className="w-40px max-w-md p-3 bg-gradient-to-r from-black to-gray-800 text-white rounded-lg hover:from-blue-500 hover:to-blue-400 focus:outline-none shadow-lg transform transition-transform hover:scale-105"
+                                        className="w-[90%] max-w-[400px] mt-6 p-3 bg-gradient-to-r from-green-500 to-green-400 text-white font-semibold rounded-lg hover:scale-105 focus:outline-none shadow-lg transition-transform"
                                     >
                                         Book Seats
                                     </button>
@@ -260,6 +303,7 @@ function BuyTickets() {
                             </>
                         )}
                     </motion.div>
+
 
                     {/*Step 03*/}
 

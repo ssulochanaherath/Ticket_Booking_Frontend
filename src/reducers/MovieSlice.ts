@@ -75,8 +75,11 @@ const MovieSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(getMovies.fulfilled, (_, action) => action.payload)
-        .addCase(getMovies.rejected, (state, action) => {
+            .addCase(getMovies.fulfilled, (_, action) => {
+                return action.payload; // This should set the movies array
+            })
+
+            .addCase(getMovies.rejected, (state, action) => {
             console.error("Error fetching movies:", action.payload);
         })
         .addCase(saveMovie.fulfilled, (state, action) => {

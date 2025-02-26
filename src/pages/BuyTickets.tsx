@@ -186,15 +186,7 @@ function BuyTickets() {
                 {/* Steps Content */}
 
                 {/*Step 01*/}
-
-                <motion.div
-                    key={step}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow"
-                >
-                    {/* Steps rendering code continues */}
+                {step === 1 && (
                     <motion.div
                         key={step}
                         initial={{ opacity: 0, y: 10 }}
@@ -202,47 +194,42 @@ function BuyTickets() {
                         transition={{ duration: 0.4 }}
                         className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow"
                     >
-                        {/* Steps rendering code continues */}
-                        {step === 1 && (
-                            <>
-                                <h2 className="text-3xl font-bold mb-6 text-center text-white">
-                                    Choose a Movie
-                                </h2>
-                                <div className="space-y-4">
-                                    {movies.length === 0 ? (
-                                        <p className="text-gray-400 text-center">Loading movies...</p>
-                                    ) : (
-                                        movies.map((movie, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => handleSelectMovie(movie.name)}
-                                                className={`w-full max-w-xs px-6 py-4 rounded-xl transition-all backdrop-blur-lg shadow-md 
+                        <h2 className="text-3xl font-bold mb-6 text-center text-white">
+                            Choose a Movie
+                        </h2>
+                        <div className="space-y-4">
+                            {movies.length === 0 ? (
+                                <p className="text-gray-400 text-center">Loading movies...</p>
+                            ) : (
+                                movies.map((movie, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleSelectMovie(movie.name)}
+                                        className={`w-full max-w-xs px-6 py-4 rounded-xl transition-all backdrop-blur-lg shadow-md 
                                 ${selectedMovie === movie.name
-                                                    ? "bg-blue-500 text-white shadow-lg scale-105"
-                                                    : "bg-gray-800/70 text-gray-200 hover:bg-gray-700 hover:scale-105"}`}
-                                            >
-                                                {movie.name}
-                                            </button>
-                                        ))
-                                    )}
-                                </div>
-                                <motion.button
-                                    onClick={() => setStep(2)}
-                                    disabled={!selectedMovie}
-                                    className="w-full mt-8 px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition-all
-                    bg-gradient-to-r from-blue-500 to-teal-500 hover:scale-105 active:scale-95"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    Next
-                                </motion.button>
-                            </>
-                        )}
+                                            ? "bg-blue-500 text-white shadow-lg scale-105"
+                                            : "bg-gray-800/70 text-gray-200 hover:bg-gray-700 hover:scale-105"}`}
+                                    >
+                                        {movie.name}
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                        <motion.button
+                            onClick={() => setStep(2)}
+                            disabled={!selectedMovie}
+                            className="w-full mt-8 px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition-all
+                        bg-gradient-to-r from-blue-500 to-teal-500 hover:scale-105 active:scale-95"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            Next
+                        </motion.button>
                     </motion.div>
+                )}
 
-
-                    {/*Step 02*/}
-
+                {/*Step 02*/}
+                {step === 2 && (
                     <motion.div
                         key={step}
                         initial={{ opacity: 0, y: 10 }}
@@ -250,164 +237,155 @@ function BuyTickets() {
                         transition={{ duration: 0.4 }}
                         className="w-full bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col items-center"
                     >
-                        {step === 2 && (
-                            <>
-                                <h2 className="text-3xl font-bold mb-6 text-center text-white">Choose a Seat</h2>
+                        <h2 className="text-3xl font-bold mb-6 text-center text-white">Choose a Seat</h2>
 
-                                {/* Screen Indicator */}
-                                <div className="w-[90%] h-10 bg-gray-700 rounded-t-lg flex items-center justify-center mb-8">
-                                    <span className="text-gray-200 text-lg font-semibold">SCREEN</span>
-                                </div>
+                        {/* Screen Indicator */}
+                        <div className="w-[90%] h-10 bg-gray-700 rounded-t-lg flex items-center justify-center mb-8">
+                            <span className="text-gray-200 text-lg font-semibold">SCREEN</span>
+                        </div>
 
-                                {/* Seat Layout */}
-                                <div className="flex justify-center items-center space-x-20">
-                                    {/* Left Side (Rows A & B) */}
-                                    <div className="flex flex-col items-center space-y-10">
-                                        {['A', 'B'].map((row, rowIndex) => (
-                                            <div key={rowIndex} className="flex justify-center space-x-6">
-                                                {[1, 2, 3, 4, 5].map((seatIndex) => {
-                                                    const seatId = `${row}${seatIndex}`;
-                                                    return (
-                                                        <button
-                                                            key={seatId}
-                                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform 
+                        {/* Seat Layout */}
+                        <div className="flex justify-center items-center space-x-20">
+                            {/* Left Side (Rows A & B) */}
+                            <div className="flex flex-col items-center space-y-10">
+                                {['A', 'B'].map((row, rowIndex) => (
+                                    <div key={rowIndex} className="flex justify-center space-x-6">
+                                        {[1, 2, 3, 4, 5].map((seatIndex) => {
+                                            const seatId = `${row}${seatIndex}`;
+                                            return (
+                                                <button
+                                                    key={seatId}
+                                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform 
                                             ${
-                                                                seats[seatId]
-                                                                    ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
-                                                                    : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
-                                                            } 
+                                                        seats[seatId]
+                                                            ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                            : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
+                                                    } 
                                             text-white font-semibold`}
-                                                            onClick={() => handleSeatClick(seatId)}
-                                                        >
-                                                            {seatId}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        ))}
+                                                    onClick={() => handleSeatClick(seatId)}
+                                                >
+                                                    {seatId}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
+                                ))}
+                            </div>
 
-                                    {/* Right Side (Rows C & D) */}
-                                    <div className="flex flex-col items-center space-y-10">
-                                        {['C', 'D'].map((row, rowIndex) => (
-                                            <div key={rowIndex} className="flex justify-center space-x-6">
-                                                {[1, 2, 3, 4, 5].map((seatIndex) => {
-                                                    const seatId = `${row}${seatIndex}`;
-                                                    return (
-                                                        <button
-                                                            key={seatId}
-                                                            className={`w-16 h-16 rounded-lg border-2 transition-all transform 
+                            {/* Right Side (Rows C & D) */}
+                            <div className="flex flex-col items-center space-y-10">
+                                {['C', 'D'].map((row, rowIndex) => (
+                                    <div key={rowIndex} className="flex justify-center space-x-6">
+                                        {[1, 2, 3, 4, 5].map((seatIndex) => {
+                                            const seatId = `${row}${seatIndex}`;
+                                            return (
+                                                <button
+                                                    key={seatId}
+                                                    className={`w-16 h-16 rounded-lg border-2 transition-all transform 
                                             ${
-                                                                seats[seatId]
-                                                                    ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
-                                                                    : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
-                                                            } 
+                                                        seats[seatId]
+                                                            ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                            : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
+                                                    } 
                                             text-white font-semibold`}
-                                                            onClick={() => handleSeatClick(seatId)}
-                                                        >
-                                                            {seatId}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        ))}
+                                                    onClick={() => handleSeatClick(seatId)}
+                                                >
+                                                    {seatId}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
-                                </div>
-
-                                {/* Selected Seats Input & Booking Button */}
-                                <div className="mt-12 text-center">
-                                    <input
-                                        id="seatInput"
-                                        type="text"
-                                        value={selectedSeats}
-                                        readOnly
-                                        className="p-2 w-[90%] max-w-[400px] rounded-lg border-2 border-gray-500 bg-gray-800 text-white text-lg text-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Click seats to select"
-                                    />
-                                    <button
-                                        onClick={handleBookSeats}
-                                        className="w-[90%] max-w-[400px] mt-6 p-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-lg hover:scale-105 focus:outline-none shadow-lg transition-transform"
-                                    >
-                                        Book Seats
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </motion.div>
-
-
-                    {/*Step 03*/}
-
-                    {step === 3 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.4 }}
-                            className="w-full p-6 rounded-xl shadow-xl flex-grow bg-gray-800 max-w-md mx-auto"
-                        >
-                            <h2 className="text-3xl font-bold mb-6 text-center text-white">Enter your Details</h2>
-
-                            {/* Customer Information Form */}
-                            <div className="space-y-6">
-                                <input
-                                    type="email"
-                                    value={customerEmail}
-                                    onChange={(e) => setCustomerEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
-                                    required
-                                />
-                                <input
-                                    type="tel"
-                                    value={customerPhone}
-                                    onChange={(e) => setCustomerPhone(e.target.value)}
-                                    placeholder="Enter your phone number"
-                                    className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
-                                    required
-                                />
+                                ))}
                             </div>
+                        </div>
 
-                            {/* Submit Button */}
-                            <div className="mt-6 text-center">
-                                <button
-                                    onClick={handleSubmit}  // Replace with your form submission handler
-                                    className="w-[50%] p-4 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg shadow-lg hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-
-
-                    {/*Step 04*/}
-
-                    {step === 4 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.4 }}
-                            className="w-full bg-white p-8 rounded-3xl shadow-xl flex-grow text-center max-w-lg mx-auto"
-                        >
-                            <h2 className="text-3xl font-semibold text-gray-800 mb-8">🎬 Booking Summary</h2>
-
-                            <div className="text-lg text-gray-700 space-y-6">
-                                <p><strong className="font-medium">🎥 Movie:</strong> {selectedMovie || "Not selected"}</p>
-                                <p><strong className="font-medium">🍿 Seats:</strong> {selectedSeats.length > 0 ? selectedSeats.join(", ") : "No seats selected"}</p>
-                                <p><strong className="font-medium">📧 Email:</strong> {customerData.email || "Not provided"}</p>
-                                <p><strong className="font-medium">📱 Phone:</strong> {customerData.phone || "Not provided"}</p>
-                            </div>
-
+                        {/* Selected Seats Input & Booking Button */}
+                        <div className="mt-12 text-center">
+                            <input
+                                id="seatInput"
+                                type="text"
+                                value={selectedSeats}
+                                readOnly
+                                className="p-2 w-[90%] max-w-[400px] rounded-lg border-2 border-gray-500 bg-gray-800 text-white text-lg text-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Click seats to select"
+                            />
                             <button
-                                onClick={handleFinalBooking}
-                                className="mt-8 px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                                onClick={handleBookSeats}
+                                className="w-[90%] max-w-[400px] mt-6 p-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-lg hover:scale-105 focus:outline-none shadow-lg transition-transform"
                             >
-                                ✅ Confirm Booking
+                                Book Seats
                             </button>
-                        </motion.div>
-                    )}
+                        </div>
+                    </motion.div>
+                )}
 
-                </motion.div>
+                {/*Step 03*/}
+                {step === 3 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="w-full p-6 rounded-xl shadow-xl flex-grow bg-gray-800 max-w-md mx-auto"
+                    >
+                        <h2 className="text-3xl font-bold mb-6 text-center text-white">Enter your Details</h2>
+
+                        {/* Customer Information Form */}
+                        <div className="space-y-6">
+                            <input
+                                type="email"
+                                value={customerEmail}
+                                onChange={(e) => setCustomerEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
+                                required
+                            />
+                            <input
+                                type="tel"
+                                value={customerPhone}
+                                onChange={(e) => setCustomerPhone(e.target.value)}
+                                placeholder="Enter your phone number"
+                                className="w-full p-4 rounded-lg bg-transparent border-2 border-gray-300 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-md transition-all"
+                                required
+                            />
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="mt-6 text-center">
+                            <button
+                                onClick={handleSubmit}  // Replace with your form submission handler
+                                className="w-[50%] p-4 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg shadow-lg hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/*Step 04*/}
+                {step === 4 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="w-full bg-white p-8 rounded-3xl shadow-xl flex-grow text-center max-w-lg mx-auto"
+                    >
+                        <h2 className="text-3xl font-semibold text-gray-800 mb-8">🎬 Booking Summary</h2>
+
+                        <div className="text-lg text-gray-700 space-y-6">
+                            <p><strong className="font-medium">🎥 Movie:</strong> {selectedMovie || "Not selected"}</p>
+                            <p><strong className="font-medium">🍿 Seats:</strong> {selectedSeats.length > 0 ? selectedSeats.join(", ") : "No seats selected"}</p>
+                            <p><strong className="font-medium">📧 Email:</strong> {customerData.email || "Not provided"}</p>
+                            <p><strong className="font-medium">📱 Phone:</strong> {customerData.phone || "Not provided"}</p>
+                        </div>
+
+                        <button
+                            onClick={handleFinalBooking}
+                            className="mt-8 px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
+                            ✅ Confirm Booking
+                        </button>
+                    </motion.div>
+                )}
             </div>
         </div>
     );

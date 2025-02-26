@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMovies } from "../reducers/MovieSlice"; // Import your action
 import { RootState } from "../store/Store"; // Import your store's RootState
 import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {FaFilm, FaTicketAlt, FaUser, FaCheckCircle} from "react-icons/fa"; // Import seat actions
 
 function BuyTickets() {

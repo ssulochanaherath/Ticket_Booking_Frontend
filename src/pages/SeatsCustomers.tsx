@@ -99,14 +99,23 @@ const SeatsC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats.jpg)', backgroundSize: 'cover' }}>
+        <div className="min-h-screen bg-gray-100 relative">
+            {/* Background Image and Overlay */}
+            <div
+                className="fixed top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat z-0 transition-all duration-300"
+                style={{ backgroundImage: 'url(./src/assets/seats.jpg)',
+                filter: 'brightness(1.5)',
+                }}
+            ></div>
+            <div className="fixed top-0 left-0 w-full h-full bg-black opacity-60 z-10"></div>
+
+            {/* Navbar */}
             <NavbarC />
-            <div className="mt-8 max-w-screen-lg mx-auto">
+
+            <div className="mt-8 max-w-screen-lg mx-auto px-4 sm:px-6 relative z-20">
                 {/* Screen indicator */}
                 <div className="relative w-full h-16 bg-gray-800 mx-auto rounded-lg mb-12">
-                    <div className="absolute inset-0 flex justify-center items-center text-white font-bold">
-                        Screen
-                    </div>
+                    <div className="absolute inset-0 flex justify-center items-center text-white font-bold">Screen</div>
                 </div>
 
                 {/* Seat grid rendering */}
@@ -147,9 +156,8 @@ const SeatsC = () => {
                 </div>
 
                 {/* Seat booking UI */}
-                <div className="mt-12 text-center"> {/* Increased margin-top */}
+                <div className="mt-12 text-center">
                     <div className="mb-6">
-                        {/*<label htmlFor="seatInput" className="block text-white text-lg font-medium mb-2">Selected Seats:</label>*/}
                         <input
                             id="seatInput"
                             type="text"
@@ -167,10 +175,9 @@ const SeatsC = () => {
                     </button>
                 </div>
 
-
                 {/* Booked indicator */}
-                <div className="absolute top-28 right-4 flex items-center space-x-2 text-white">
-                    <div className="w-6 h-6 bg-blue-950 rounded-full"></div> {/* Reduced size */}
+                <div className="absolute top-28 right-4 flex items-center space-x-2 text-white z-20">
+                    <div className="w-6 h-6 bg-blue-950 rounded-full"></div>
                     <span>Booked</span>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import battleImage from '../assets/battle.jpg';
 import missionImage from '../assets/mission.jpg';
@@ -14,6 +15,7 @@ const moviePosters = [
 
 const Dashboard: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -23,6 +25,10 @@ const Dashboard: React.FC = () => {
         }, 4000); // Change image every 4 seconds
         return () => clearInterval(interval);
     }, []);
+
+    const handleNavigate = () => {
+        navigate('/filmsc'); // Navigate to /filmsc when button is clicked
+    };
 
     return (
         <div className="relative w-full h-screen bg-gray-900">
@@ -49,7 +55,10 @@ const Dashboard: React.FC = () => {
                 {/* Movie Description */}
                 <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 text-white text-lg md:text-xl font-semibold text-center px-4">
                     <p>{moviePosters[currentIndex].description}</p>
-                    <button className="mt-6 px-8 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-yellow-600 focus:outline-none">
+                    <button
+                        onClick={handleNavigate} // Add onClick handler to navigate
+                        className="mt-6 px-8 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-yellow-600 focus:outline-none"
+                    >
                         Available Movies
                     </button>
                 </div>

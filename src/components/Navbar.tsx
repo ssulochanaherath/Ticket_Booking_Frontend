@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FaFilm, FaSignOutAlt } from 'react-icons/fa';
+import {useDispatch} from "react-redux";
+import { setRole, setEmail, setPassword, setError } from '../reducers/SignupSlice';  // Ensure the correct path
 
 function Navbar() {
     const navigate = useNavigate();
     const location = useLocation(); // Get current route
+    const dispatch = useDispatch();
 
     // Define colors for different pages
     const navbarColors = {
@@ -19,8 +22,19 @@ function Navbar() {
     const navbarColor = navbarColors[location.pathname] || 'bg-gradient-to-r from-black to-blue-950';
 
     const handleSignOut = () => {
-        navigate('/login');
+        // First, navigate to the home page
+        navigate("/");
+
+        // Dispatch Redux actions to reset authentication state
+        dispatch(setRole('')); // Clear the role
+        dispatch(setEmail('')); // Optionally clear email
+        dispatch(setPassword('')); // Optionally clear password
+        dispatch(setError('')); // Clear any errors (optional)
+
+        // Optionally, remove any authentication data from localStorage
+        localStorage.removeItem('auth_token'); // or any other relevant storage
     };
+
 
     return (
         <nav className={`${navbarColor} p-4 transition-all duration-300`}>

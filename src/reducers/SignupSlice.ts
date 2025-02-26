@@ -5,7 +5,7 @@ import axios from 'axios';
 const initialState = {
     email: '',
     password: '',
-    role: 'User',
+    role: '',
     error: '',
     loading: false,
     success: false,  // Add success field to the state
@@ -26,6 +26,19 @@ export const signupUser = createAsyncThunk(
         } catch (error: any) {
             console.error('Error signing up:', error);  // Log error details
             return rejectWithValue(error.response?.data || 'Failed to signup');
+        }
+    }
+);
+
+export const fetchUserRoleByEmail = createAsyncThunk(
+    'signup/fetchUserRoleByEmail',
+    async (email: string, { rejectWithValue }) => {
+        try {
+            const response = await api.get(`User/role/${email}`); // Call the new API route
+            return response.data.role; // Return the role
+        } catch (error: any) {
+            console.error('Error fetching role:', error);
+            return rejectWithValue(error.response?.data || 'Failed to fetch role');
         }
     }
 );
@@ -70,7 +83,17 @@ const signupSlice = createSlice({
             // ✅ Signup pending (loading)
             .addCase(signupUser.pending, (state) => {
                 state.loading = true;
+            })
+
+            .addCase(fetchUserRoleByEmail.fulfilled, (state, action) => {
+                state.role = action.payload;  // Ensure role is updated
+                state.error = ''; // Clear previous errors
+            })
+
+            .addCase(fetchUserRoleByEmail.rejected, (state, action) => {
+                state.error = action.payload as string;
             });
+
     },
 });
 

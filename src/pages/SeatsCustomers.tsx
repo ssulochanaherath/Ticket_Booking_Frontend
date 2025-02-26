@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers} from '../reducers/SeatsCustomerSlice';
+import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice';
 import { AppDispatch } from "../store/Store.ts";
 import { RootState } from '../store/Store';
 import NavbarC from "../components/NavbarC.tsx"; // Assuming you have RootState for useSelector
@@ -14,7 +14,7 @@ const SeatsC = () => {
     ];
 
     const [seats, setSeats] = useState<{ [key: string]: boolean }>({}); // Track availability of seats by ID
-    const [selectedSeat, setSelectedSeat] = useState<string>(''); // Selected seat ID for booking
+    const [selectedSeats, setSelectedSeats] = useState<string>(''); // Comma-separated string of selected seats
     const dispatch = useDispatch<AppDispatch>();
 
     // Fetch seats customers (available seats) on component mount
@@ -36,42 +36,54 @@ const SeatsC = () => {
 
     // Handle seat click to toggle seat selection
     const handleSeatClick = (seatId: string) => {
-        setSeats((prevSeats) => ({
-            ...prevSeats,
-            [seatId]: !prevSeats[seatId], // Toggle the seat availability
-        }));
+        setSelectedSeats((prevSeats) => {
+            // Add the seat to the list if not already selected
+            if (!prevSeats.includes(seatId)) {
+                return prevSeats ? prevSeats + ',' + seatId : seatId;
+            }
+            return prevSeats; // If already selected, don't add again
+        });
     };
 
     // Handle seat booking
-    const handleBookSeat = async () => {
-        if (!selectedSeat) {
-            alert('Please select a seat to book');
+    const handleBookSeats = async () => {
+        if (!selectedSeats) {
+            alert('Please select at least one seat to book');
             return;
         }
 
-        // Check if the seat is already booked
-        if (seats[selectedSeat]) {
-            alert('This seat is already booked');
-            return;
-        }
+        const seatsToBook = selectedSeats.split(','); // Convert the selected seats string into an array
 
-        const seatCustomer = { name: selectedSeat };
+        // Check if any of the seats are already booked
+        for (const seat of seatsToBook) {
+            if (seats[seat]) {
+                alert(`Seat ${seat} is already booked`);
+                return;
+            }
+        }
 
         try {
-            // Dispatch to save the seat customer
-            await dispatch(saveSeatsCustomer(seatCustomer));
+            // Dispatch to save the seat customers
+            const seatCustomerPromises = seatsToBook.map(seat => dispatch(saveSeatsCustomer({ name: seat })));
+            await Promise.all(seatCustomerPromises);
 
             // Fetch the updated list of seats after booking
             await dispatch(getSeatsCustomers());
 
-            // Mark the seat as booked locally
-            setSeats((prevSeats) => ({
-                ...prevSeats,
-                [selectedSeat]: true,
-            }));
+            // Mark the seats as booked locally
+            setSeats((prevSeats) => {
+                const updatedSeats = { ...prevSeats };
+                seatsToBook.forEach((seat) => {
+                    updatedSeats[seat] = true;
+                });
+                return updatedSeats;
+            });
+
+            // Clear the selected seats input field
+            setSelectedSeats('');
 
         } catch (error) {
-            alert('Error booking the seat. Please try again.');
+            alert('Error booking the seats. Please try again.');
         }
     };
 
@@ -85,17 +97,6 @@ const SeatsC = () => {
             }
         }
     };
-
-
-    // Generate available seats for the dropdown
-    const availableSeatsForDropdown = [];
-    seatNames.forEach((row) => {
-        row.forEach((seat) => {
-            if (!seats[seat.id]) { // Seat is available
-                availableSeatsForDropdown.push(seat.id);
-            }
-        });
-    });
 
     return (
         <div className="min-h-screen bg-gray-100" style={{ backgroundImage: 'url(./src/assets/seats.jpg)', backgroundSize: 'cover' }}>
@@ -117,9 +118,7 @@ const SeatsC = () => {
                                 {row.map((seat) => (
                                     <button
                                         key={seat.id}
-                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
-                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
-                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80`}
                                         onClick={() => handleSeatClick(seat.id)}
                                     >
                                         {seat.name}
@@ -136,9 +135,7 @@ const SeatsC = () => {
                                 {row.map((seat) => (
                                     <button
                                         key={seat.id}
-                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${
-                                            seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'
-                                        } text-white font-semibold hover:scale-110 hover:opacity-80`}
+                                        className={`w-16 h-16 rounded-lg border-2 transition-all transform ${seats[seat.id] ? 'bg-blue-950' : 'border-gray-400'} text-white font-semibold hover:scale-110 hover:opacity-80`}
                                         onClick={() => handleSeatClick(seat.id)}
                                     >
                                         {seat.name}
@@ -149,45 +146,33 @@ const SeatsC = () => {
                     </div>
                 </div>
 
-
                 {/* Seat booking UI */}
-                <div className="mt-6 text-center">
-                    <div>
-                        <label htmlFor="seatSelect" className="block text-white">Select an available seat:</label>
-                        <select
-                            id="seatSelect"
-                            value={selectedSeat}
-                            onChange={(e) => setSelectedSeat(e.target.value)}
-                            className="p-2 rounded border-2 border-gray-400"
-                        >
-                            <option value="">-- Select Seat --</option>
-                            {availableSeatsForDropdown.map((seat) => (
-                                <option key={seat} value={seat}>
-                                    {seat}
-                                </option>
-                            ))}
-                        </select>
+                <div className="mt-12 text-center"> {/* Increased margin-top */}
+                    <div className="mb-6">
+                        {/*<label htmlFor="seatInput" className="block text-white text-lg font-medium mb-2">Selected Seats:</label>*/}
+                        <input
+                            id="seatInput"
+                            type="text"
+                            value={selectedSeats}
+                            readOnly
+                            className="p-4 h-2 w-50px max-w-md rounded-lg border-2 border-gray-300 bg-gray-800 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-md"
+                            placeholder="Click seats to select"
+                        />
                     </div>
                     <button
-                        onClick={handleBookSeat}
-                        className="ml-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+                        onClick={handleBookSeats}
+                        className="w-40px max-w-md p-3 bg-gradient-to-r from-black to-gray-800 text-white rounded-lg hover:from-blue-500 hover:to-blue-400 focus:outline-none shadow-lg transform transition-transform hover:scale-105"
                     >
-                        Book
+                        Book Seats
                     </button>
                 </div>
+
 
                 {/* Booked indicator */}
                 <div className="absolute top-28 right-4 flex items-center space-x-2 text-white">
                     <div className="w-6 h-6 bg-blue-950 rounded-full"></div> {/* Reduced size */}
                     <span>Booked</span>
                 </div>
-                {/*<button*/}
-                {/*    onClick={handleResetSeats}*/}
-                {/*    className="mt-4 p-2 bg-red-600 text-white rounded hover:bg-red-500"*/}
-                {/*>*/}
-                {/*    Reset All Bookings*/}
-                {/*</button>*/}
-
             </div>
         </div>
     );

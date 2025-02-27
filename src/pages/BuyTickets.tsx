@@ -1,38 +1,39 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import NavbarC from "../components/NavbarC.tsx";
 import { useDispatch, useSelector } from "react-redux";
+import { saveTickets } from "../reducers/TicketSlice";  // Import your Redux action
 import { getMovies } from "../reducers/MovieSlice"; // Import your action
+import { getSeatsCustomers, saveSeatsCustomer, resetSeatsCustomers } from "../reducers/SeatsCustomerSlice";
 import { RootState } from "../store/Store"; // Import your store's RootState
-import { saveSeatsCustomer, getSeatsCustomers, resetSeatsCustomers } from '../reducers/SeatsCustomerSlice';
-import {FaFilm, FaTicketAlt, FaUser, FaCheckCircle} from "react-icons/fa"; // Import seat actions
+import { FaFilm, FaTicketAlt, FaUser, FaCheckCircle } from "react-icons/fa"; // Icons for step navigation
 
-function BuyTickets() {
+const Tickets = () => {
     const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
     const [step, setStep] = useState(1);
     const [seats, setSeats] = useState<{ [key: string]: boolean }>({}); // Track availability of seats by ID
-    const [selectedSeats, setSelectedSeats] = useState<string[]>([]);// Comma-separated string of selected seats
+    const [selectedSeats, setSelectedSeats] = useState<string[]>([]); // Comma-separated string of selected seats
+    const [ticket, setTicket] = useState({
+        movie: "",
+        seats: [],
+        email: "",
+        phone: "",
+    });
     const dispatch = useDispatch();
-    const movies = useSelector((state: RootState) => state.movies); // Get movies from the Redux store
+    const movies = useSelector((state: RootState) => state.movies); // Get movies from Redux store
     const availableSeats = useSelector((state: RootState) => state.seatsCustomers); // Get available seats from Redux store
     const [customerEmail, setCustomerEmail] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
-    const [customerData, setCustomerData] = useState({ email: "", phone: "" });
-
-
 
     useEffect(() => {
-        dispatch(getMovies()); // Dispatch action to fetch movies
+        dispatch(getMovies()); // Fetch movies when the component mounts
     }, [dispatch]);
 
-    // Fetch available seats (step 2)
     useEffect(() => {
         if (step === 2) {
-            dispatch(getSeatsCustomers());
+            dispatch(getSeatsCustomers()); // Fetch available seats when at step 2
         }
     }, [step, dispatch]);
 
-    // Update local seats state when availableSeats changes
     useEffect(() => {
         const newSeatsState: { [key: string]: boolean } = {};
         availableSeats.forEach((seat) => {
@@ -51,10 +52,9 @@ function BuyTickets() {
         );
     };
 
-
     const handleBookSeats = async () => {
         if (selectedSeats.length === 0) {
-            alert('Please select at least one seat to book');
+            alert("Please select at least one seat to book");
             return;
         }
 
@@ -67,100 +67,76 @@ function BuyTickets() {
         }
 
         try {
-            await Promise.all(selectedSeats.map(seat => dispatch(saveSeatsCustomer({ name: seat }))));
+            // Log selected seats for debugging
+            console.log("Selected Seats for booking:", selectedSeats);
+
+            // Save selected seats to the backend
+            const savePromises = selectedSeats.map((seat) => {
+                console.log(`Saving seat: ${seat}`); // Log each seat being saved
+                return dispatch(saveSeatsCustomer({ name: seat }));
+            });
+
+            await Promise.all(savePromises);
+
+            // Refresh available seats
             await dispatch(getSeatsCustomers());
 
+            // Update local state to mark the selected seats as booked
             setSeats((prevSeats) => {
                 const updatedSeats = { ...prevSeats };
                 selectedSeats.forEach((seat) => {
-                    updatedSeats[seat] = true;
+                    updatedSeats[seat] = true; // Mark the seat as booked
                 });
                 return updatedSeats;
             });
 
-            setStep(3); // Move to step 3
+            setStep(3); // Move to step 3 for customer details
 
         } catch (error) {
-            alert('Error booking the seats. Please try again.');
+            console.error("Error booking the seats:", error); // Log error for debugging
+            alert("Error booking the seats. Please try again.");
         }
     };
 
-    const handleSubmit = (e) => {
+
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Handle the form submission logic here
         if (!customerEmail || !customerPhone) {
-            alert('Please fill out all fields!');
+            alert("Please fill out all fields!");
             return;
         }
 
-        setCustomerData({ email: customerEmail, phone: customerPhone });
-
-        // Example: you could log the form data or send it to a backend
-        console.log('Customer Email:', customerEmail);
-        console.log('Customer Phone:', customerPhone);
-
-        // Reset the fields or proceed with next step
-        setCustomerEmail('');
-        setCustomerPhone('');
-
-        setStep(4);
-    };
-
-    const handleResetSeats = async () => {
-        if (window.confirm("Are you sure you want to reset all booked seats?")) {
-            try {
-                await dispatch(resetSeatsCustomers());
-                await dispatch(getSeatsCustomers());
-            } catch (error) {
-                alert('Error resetting seats. Please try again.');
-            }
-        }
+        setTicket({ ...ticket, email: customerEmail, phone: customerPhone });
+        setStep(4); // Proceed to step 4
     };
 
     const handleFinalBooking = async () => {
-        if (!selectedMovie || selectedSeats.length === 0 || !customerEmail || !customerPhone) {
-            alert("Please complete all steps before booking.");
-            return;
-        }
+        const ticketData = {
+            movie: selectedMovie || "",
+            seats: selectedSeats || "",
+            email: customerEmail || "",
+            phone: customerPhone || "",
+        };
 
         try {
-            const response = await fetch("http://your-backend-api.com/book", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    movie: selectedMovie,
-                    seats: selectedSeats,
-                    email: customerEmail,
-                    phone: customerPhone,
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert("Your booking is confirmed!");
-            } else {
-                alert("Booking failed: " + data.message);
-            }
+            await dispatch(saveTickets(ticketData));
+            alert("Ticket added successfully!");
         } catch (error) {
-            console.error("Error booking seats:", error);
-            alert("An error occurred while booking. Please try again.");
+            alert("Error adding ticket: " + error.message);
         }
     };
-
 
     return (
         <div className="relative w-full min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col">
             <div className="fixed top-0 left-0 w-full h-full z-[-1] bg-gradient-to-b from-gray-900 to-black"></div>
-            <NavbarC />
             <div className="flex flex-col items-stretch justify-between flex-grow mt-1 p-8">
-                {/* Step Navigation with Text */}
+                {/* Step Navigation with Icons */}
                 <div className="flex justify-between mb-6">
                     <div
                         className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-        ${step === 1 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                            ${step === 1 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
                         onClick={() => setStep(1)}
                     >
                         <FaFilm size={24} className="mb-2" />
@@ -168,7 +144,7 @@ function BuyTickets() {
                     </div>
                     <div
                         className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-        ${step === 2 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                            ${step === 2 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
                         onClick={() => setStep(2)}
                     >
                         <FaTicketAlt size={24} className="mb-2" />
@@ -176,7 +152,7 @@ function BuyTickets() {
                     </div>
                     <div
                         className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-        ${step === 3 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                            ${step === 3 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
                         onClick={() => setStep(3)}
                     >
                         <FaUser size={24} className="mb-2" />
@@ -184,7 +160,7 @@ function BuyTickets() {
                     </div>
                     <div
                         className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-        ${step === 4 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
+                            ${step === 4 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
                         onClick={() => setStep(4)}
                     >
                         <FaCheckCircle size={24} className="mb-2" />
@@ -192,10 +168,9 @@ function BuyTickets() {
                     </div>
                 </div>
 
+                {/* Step Contents */}
 
-                {/* Steps Content */}
-
-                {/*Step 01*/}
+                {/* Step 1: Select Movie */}
                 {step === 1 && (
                     <motion.div
                         key={step}
@@ -204,9 +179,7 @@ function BuyTickets() {
                         transition={{ duration: 0.4 }}
                         className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow"
                     >
-                        <h2 className="text-3xl font-bold mb-6 text-center text-white">
-                            Choose a Movie
-                        </h2>
+                        <h2 className="text-3xl font-bold mb-6 text-center text-white">Choose a Movie</h2>
                         <div className="space-y-4">
                             {movies.length === 0 ? (
                                 <p className="text-gray-400 text-center">Loading movies...</p>
@@ -216,7 +189,7 @@ function BuyTickets() {
                                         key={index}
                                         onClick={() => handleSelectMovie(movie.name)}
                                         className={`w-full max-w-xs px-6 py-4 rounded-xl transition-all backdrop-blur-lg shadow-md 
-                                ${selectedMovie === movie.name
+                                            ${selectedMovie === movie.name
                                             ? "bg-blue-500 text-white shadow-lg scale-105"
                                             : "bg-gray-800/70 text-gray-200 hover:bg-gray-700 hover:scale-105"}`}
                                     >
@@ -229,7 +202,7 @@ function BuyTickets() {
                             onClick={() => setStep(2)}
                             disabled={!selectedMovie}
                             className="w-full mt-8 px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition-all
-                        bg-gradient-to-r from-blue-500 to-teal-500 hover:scale-105 active:scale-95"
+                            bg-gradient-to-r from-blue-500 to-teal-500 hover:scale-105 active:scale-95"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -238,7 +211,7 @@ function BuyTickets() {
                     </motion.div>
                 )}
 
-                {/*Step 02*/}
+                {/* Step 2: Book Seat */}
                 {step === 2 && (
                     <motion.div
                         key={step}
@@ -329,79 +302,72 @@ function BuyTickets() {
                     </motion.div>
                 )}
 
-                {/*Step 03*/}
+                {/* Step 3: Customer Details */}
                 {step === 3 && (
                     <motion.div
+                        key={step}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="w-full p-8 rounded-2xl shadow-2xl flex-grow bg-gray-900 max-w-lg mx-auto"
+                        className="w-full bg-gray-900 p-8 rounded-2xl shadow-2xl flex-grow text-center"
                     >
-                        <h2 className="text-4xl font-semibold text-center text-white mb-8">Enter Your Details</h2>
-
-                        {/* Customer Information Form */}
-                        <div className="space-y-8">
+                        <h2 className="text-4xl font-semibold text-white mb-8">Enter Your Details</h2>
+                        <form onSubmit={handleSubmit}>
                             <input
                                 type="email"
+                                placeholder="Enter your email"
                                 value={customerEmail}
                                 onChange={(e) => setCustomerEmail(e.target.value)}
-                                placeholder="Enter your email"
-                                className="w-full p-5 rounded-lg bg-transparent border-2 border-gray-700 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow-xl transition-all"
+                                className="w-full bg-gray-800 rounded-md p-4 mb-6 text-white placeholder-gray-400"
                                 required
                             />
                             <input
                                 type="tel"
+                                placeholder="Enter your phone number"
                                 value={customerPhone}
                                 onChange={(e) => setCustomerPhone(e.target.value)}
-                                placeholder="Enter your phone number"
-                                className="w-full p-5 rounded-lg bg-transparent border-2 border-gray-700 text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 shadow-xl transition-all"
+                                className="w-full bg-gray-800 rounded-md p-4 mb-6 text-white placeholder-gray-400"
                                 required
                             />
-                        </div>
-
-                        {/* Submit Button */}
-                        <div className="mt-8 text-center">
-                            <button
-                                onClick={handleSubmit}  // Replace with your form submission handler
-                                className="w-2/3 py-4 px-6 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-semibold rounded-full shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            <motion.button
+                                type="submit"
+                                className="w-full mt-6 px-6 py-3 rounded-xl text-white font-semibold shadow-lg bg-gradient-to-r from-blue-500 to-teal-500 hover:scale-105"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                             >
-                                Submit
-                            </button>
-                        </div>
+                                Next
+                            </motion.button>
+                        </form>
                     </motion.div>
                 )}
 
-
-                {/*Step 04*/}
+                {/* Step 4: Final Summary and Booking */}
                 {step === 4 && (
                     <motion.div
+                        key={step}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="w-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-10 rounded-3xl shadow-2xl flex-grow text-center max-w-lg mx-auto"
+                        className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow text-center"
                     >
-                        <h2 className="text-4xl font-semibold text-white mb-8">🎬 Booking Summary</h2>
-
-                        <div className="text-xl text-gray-300 space-y-6">
-                            <p><strong className="font-medium text-gray-100">🎥 Movie:</strong> {selectedMovie || "Not selected"}</p>
-                            <p><strong className="font-medium text-gray-100">🍿 Seats:</strong> {selectedSeats.length > 0 ? selectedSeats.join(", ") : "No seats selected"}</p>
-                            <p><strong className="font-medium text-gray-100">📧 Email:</strong> {customerData.email || "Not provided"}</p>
-                            <p><strong className="font-medium text-gray-100">📱 Phone:</strong> {customerData.phone || "Not provided"}</p>
-                        </div>
-
-                        <button
+                        <h2 className="text-3xl font-bold text-white mb-6">Final Summary</h2>
+                        <p className="text-xl mb-4 text-gray-200">Movie: {selectedMovie}</p>
+                        <p className="text-xl mb-4 text-gray-200">Seats: {selectedSeats.join(", ")}</p>
+                        <p className="text-xl mb-4 text-gray-200">Email: {customerEmail}</p>
+                        <p className="text-xl mb-4 text-gray-200">Phone: {customerPhone}</p>
+                        <motion.button
                             onClick={handleFinalBooking}
-                            className="mt-8 px-10 py-4 bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold rounded-full shadow-xl transform transition-all hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-green-600"
+                            className="w-full mt-6 px-6 py-3 rounded-xl text-white font-semibold shadow-lg bg-gradient-to-r from-blue-500 to-teal-500"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                         >
-                            ✅ Confirm Booking
-                        </button>
+                            Confirm and Book Ticket
+                        </motion.button>
                     </motion.div>
                 )}
-
             </div>
         </div>
     );
+};
 
-}
-
-export default BuyTickets;
+export default Tickets;

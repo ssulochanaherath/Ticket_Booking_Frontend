@@ -124,6 +124,13 @@ const Tickets = () => {
         try {
             await dispatch(saveTickets(ticketData));
             alert("Ticket added successfully!");
+
+            setSelectedMovie(null); // Reset the selected movie
+            setSelectedSeats([]); // Clear the selected seats
+            setCustomerEmail(""); // Clear the email field
+            setCustomerPhone("");
+
+            setStep(1);
         } catch (error) {
             alert("Error adding ticket: " + error.message);
         }
@@ -135,39 +142,22 @@ const Tickets = () => {
             <NavbarC />
             <div className="flex flex-col items-stretch justify-between flex-grow mt-1 p-8">
                 {/* Step Navigation with Icons */}
-                <div className="flex justify-between mb-6">
-                    <div
-                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-                            ${step === 1 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
-                        onClick={() => setStep(1)}
-                    >
-                        <FaFilm size={24} className="mb-2" />
-                        <span>Select Movie</span>
-                    </div>
-                    <div
-                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-                            ${step === 2 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
-                        onClick={() => setStep(2)}
-                    >
-                        <FaTicketAlt size={24} className="mb-2" />
-                        <span>Book Seat</span>
-                    </div>
-                    <div
-                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-                            ${step === 3 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
-                        onClick={() => setStep(3)}
-                    >
-                        <FaUser size={24} className="mb-2" />
-                        <span>Customer Details</span>
-                    </div>
-                    <div
-                        className={`flex flex-col items-center cursor-pointer text-lg font-semibold 
-                            ${step === 4 ? "text-yellow-500 scale-110" : "text-gray-400"} transition-all`}
-                        onClick={() => setStep(4)}
-                    >
-                        <FaCheckCircle size={24} className="mb-2" />
-                        <span>Summary</span>
-                    </div>
+                <div className="flex justify-between mb-8">
+                    {['Select Movie', 'Book Seat', 'Customer Details', 'Summary'].map((stepName, index) => (
+                        <div
+                            key={stepName}
+                            className={`flex flex-col items-center cursor-pointer text-lg font-semibold
+                            ${step === index + 1 ? "text-yellow-500 scale-110" : "text-gray-400"} 
+                            transition-all`}
+                            onClick={() => setStep(index + 1)}
+                        >
+                            {index === 0 && <FaFilm size={24} className="mb-2" />}
+                            {index === 1 && <FaTicketAlt size={24} className="mb-2" />}
+                            {index === 2 && <FaUser size={24} className="mb-2" />}
+                            {index === 3 && <FaCheckCircle size={24} className="mb-2" />}
+                            <span>{stepName}</span>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Step Contents */}
@@ -191,7 +181,7 @@ const Tickets = () => {
                                         key={index}
                                         onClick={() => handleSelectMovie(movie.name)}
                                         className={`w-full max-w-xs px-6 py-4 rounded-xl transition-all backdrop-blur-lg shadow-md 
-                                            ${selectedMovie === movie.name
+                                        ${selectedMovie === movie.name
                                             ? "bg-blue-500 text-white shadow-lg scale-105"
                                             : "bg-gray-800/70 text-gray-200 hover:bg-gray-700 hover:scale-105"}`}
                                     >
@@ -241,12 +231,10 @@ const Tickets = () => {
                                                 <button
                                                     key={seatId}
                                                     className={`w-16 h-16 rounded-lg border-2 transition-all transform 
-                                            ${
-                                                        seats[seatId]
-                                                            ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
-                                                            : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
-                                                    } 
-                                            text-white font-semibold`}
+                                                    ${seats[seatId]
+                                                        ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                        : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'} 
+                                                text-white font-semibold`}
                                                     onClick={() => handleSeatClick(seatId)}
                                                 >
                                                     {seatId}
@@ -267,12 +255,10 @@ const Tickets = () => {
                                                 <button
                                                     key={seatId}
                                                     className={`w-16 h-16 rounded-lg border-2 transition-all transform 
-                                            ${
-                                                        seats[seatId]
-                                                            ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
-                                                            : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'
-                                                    } 
-                                            text-white font-semibold`}
+                                                    ${seats[seatId]
+                                                        ? 'bg-blue-600 border-blue-400 shadow-lg scale-105'
+                                                        : 'bg-gray-800 border-gray-500 hover:scale-110 hover:opacity-80'} 
+                                                text-white font-semibold`}
                                                     onClick={() => handleSeatClick(seatId)}
                                                 >
                                                     {seatId}
@@ -347,26 +333,43 @@ const Tickets = () => {
                 {step === 4 && (
                     <motion.div
                         key={step}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="w-full bg-gray-800 p-6 rounded-xl shadow-lg flex-grow text-center"
+                        transition={{ duration: 0.5 }}
+                        className="w-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-2xl shadow-xl flex-grow text-center"
                     >
-                        <h2 className="text-3xl font-bold text-white mb-6">Final Summary</h2>
-                        <p className="text-xl mb-4 text-gray-200">Movie: {selectedMovie}</p>
-                        <p className="text-xl mb-4 text-gray-200">Seats: {selectedSeats.join(", ")}</p>
-                        <p className="text-xl mb-4 text-gray-200">Email: {customerEmail}</p>
-                        <p className="text-xl mb-4 text-gray-200">Phone: {customerPhone}</p>
+                        <h2 className="text-4xl font-bold text-white mb-8">Final Summary 🎬</h2>
+
+                        <div className="text-lg text-gray-200 mb-6 space-y-4">
+                            <div>
+                                <span className="text-xl font-semibold text-gray-300">🎥 Movie:</span> {selectedMovie}
+                            </div>
+                            <div>
+                                <span className="text-xl font-semibold text-gray-300">🎟️ Seats:</span> {selectedSeats.join(", ")}
+                            </div>
+                            <div>
+                                <span className="text-xl font-semibold text-gray-300">📧 Email:</span> {customerEmail}
+                            </div>
+                            <div>
+                                <span className="text-xl font-semibold text-gray-300">📞 Phone:</span> {customerPhone}
+                            </div>
+                        </div>
+
                         <motion.button
                             onClick={handleFinalBooking}
-                            className="w-full mt-6 px-6 py-3 rounded-xl text-white font-semibold shadow-lg bg-gradient-to-r from-blue-500 to-teal-500"
+                            className="w-full max-w-lg mt-8 px-6 py-4 rounded-lg text-white font-semibold shadow-xl bg-gradient-to-r from-blue-500 to-teal-500 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            Confirm and Book Ticket
+                            Confirm and Book Ticket 🎟️
                         </motion.button>
+
+                        <div className="mt-6 text-gray-400 text-sm">
+                            <p>Please review your information before confirming the booking.</p>
+                        </div>
                     </motion.div>
                 )}
+
             </div>
         </div>
     );

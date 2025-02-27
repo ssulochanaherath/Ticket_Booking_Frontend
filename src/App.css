@@ -142,6 +142,24 @@
   background-color: transparent;
 }
 
+/* In your CSS or Tailwind classes for customization */
+.toast-success {
+  background-color: #4caf50; /* Green for success */
+  color: white;
+  font-weight: bold;
+}
+
+.toast-error {
+  background-color: #f44336; /* Red for error */
+  color: white;
+  font-weight: bold;
+}
+
+.toast-body {
+  font-size: 1.1rem;
+  padding: 10px;
+}
+
 
 
 

@@ -5,7 +5,8 @@ import { saveTickets } from "../reducers/TicketSlice";  // Import your Redux act
 import { getMovies } from "../reducers/MovieSlice"; // Import your action
 import { getSeatsCustomers, saveSeatsCustomer, resetSeatsCustomers } from "../reducers/SeatsCustomerSlice";
 import { RootState } from "../store/Store"; // Import your store's RootState
-import { FaFilm, FaTicketAlt, FaUser, FaCheckCircle } from "react-icons/fa"; // Icons for step navigation
+import { FaFilm, FaTicketAlt, FaUser, FaCheckCircle } from "react-icons/fa";
+import NavbarC from "../components/NavbarC.tsx"; // Icons for step navigation
 
 const Tickets = () => {
     const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
@@ -131,6 +132,7 @@ const Tickets = () => {
     return (
         <div className="relative w-full min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col">
             <div className="fixed top-0 left-0 w-full h-full z-[-1] bg-gradient-to-b from-gray-900 to-black"></div>
+            <NavbarC />
             <div className="flex flex-col items-stretch justify-between flex-grow mt-1 p-8">
                 {/* Step Navigation with Icons */}
                 <div className="flex justify-between mb-6">

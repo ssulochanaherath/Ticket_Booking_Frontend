@@ -6,33 +6,32 @@ import { setRole, setEmail, setPassword, setError } from '../reducers/SignupSlic
 
 function Navbar() {
     const navigate = useNavigate();
-    const location = useLocation(); // Get current route
+    const location = useLocation();
     const dispatch = useDispatch();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [clickedLink, setClickedLink] = useState(''); // Track clicked link
 
-    // Define colors for different pages
     const navbarColors = {
         '/dashboard': 'bg-transparent p-4',
         '/filmsC': 'bg-transparent p-4',
         '/buyTickets': 'bg-gradient-to-r from-gray-900 to-black p-4',
     };
 
-    // Get the color based on the current path or use a default
     const navbarColor = navbarColors[location.pathname] || 'bg-gradient-to-r from-black to-blue-950';
 
     const handleSignOut = () => {
-        // First, navigate to the home page
         navigate('/');
+        dispatch(setRole(''));
+        dispatch(setEmail(''));
+        dispatch(setPassword(''));
+        dispatch(setError(''));
+        localStorage.removeItem('auth_token');
+    };
 
-        // Dispatch Redux actions to reset authentication state
-        dispatch(setRole('')); // Clear the role
-        dispatch(setEmail('')); // Optionally clear email
-        dispatch(setPassword('')); // Optionally clear password
-        dispatch(setError('')); // Clear any errors (optional)
-
-        // Optionally, remove any authentication data from localStorage
-        localStorage.removeItem('auth_token'); // or any other relevant storage
+    // Function to handle clicking a navigation link
+    const handleNavClick = (link) => {
+        setClickedLink(link); // Set the clicked link
     };
 
     return (
@@ -50,19 +49,28 @@ function Navbar() {
                 <div className="hidden sm:flex items-center space-x-8 text-lg">
                     <NavLink
                         to="/dashboardC"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('dashboardC')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'dashboardC' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Dashboard
                     </NavLink>
                     <NavLink
                         to="/filmsC"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('filmsC')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'filmsC' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Films
                     </NavLink>
                     <NavLink
                         to="/buyTickets"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('buyTickets')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'buyTickets' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Buy Tickets
                     </NavLink>
@@ -92,19 +100,28 @@ function Navbar() {
                 <div className="sm:hidden bg-gradient-to-r from-black to-blue-950 text-white p-4 space-y-4 mt-4">
                     <NavLink
                         to="/dashboardC"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('dashboardC')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'dashboardC' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Dashboard
                     </NavLink>
                     <NavLink
                         to="/filmsC"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('filmsC')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'filmsC' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Films
                     </NavLink>
                     <NavLink
                         to="/seatsC"
-                        className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'}
+                        onClick={() => handleNavClick('seatsC')} // Track clicked link
+                        className={({ isActive }) =>
+                            (clickedLink === 'seatsC' || isActive) ? 'text-yellow-300' : 'text-white hover:text-yellow-300 transition-colors'
+                        }
                     >
                         Seats
                     </NavLink>

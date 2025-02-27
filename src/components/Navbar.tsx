@@ -62,7 +62,7 @@ function Navbar() {
                         Seats
                     </NavLink>
                     <NavLink to="/time-schedules" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
-                        Schedules
+                        Orders
                     </NavLink>
 
                     {/* Sign Out Button */}

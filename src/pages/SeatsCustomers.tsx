@@ -36,14 +36,25 @@ const SeatsC = () => {
 
     // Handle seat click to toggle seat selection
     const handleSeatClick = (seatId: string) => {
+        if (seats[seatId]) {
+            return; // Already booked in DB, do nothing
+        }
+
         setSelectedSeats((prevSeats) => {
-            // Add the seat to the list if not already selected
-            if (!prevSeats.includes(seatId)) {
-                return prevSeats ? prevSeats + ',' + seatId : seatId;
+            let selectedArray = prevSeats ? prevSeats.split(',') : [];
+
+            if (selectedArray.includes(seatId)) {
+                // Seat is already selected → remove it
+                selectedArray = selectedArray.filter(seat => seat !== seatId);
+            } else {
+                // Add seat to selection
+                selectedArray.push(seatId);
             }
-            return prevSeats; // If already selected, don't add again
+
+            return selectedArray.join(',');
         });
     };
+
 
     // Handle seat booking
     const handleBookSeats = async () => {

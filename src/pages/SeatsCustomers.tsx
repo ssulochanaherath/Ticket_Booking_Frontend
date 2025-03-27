@@ -74,14 +74,11 @@ const SeatsC = () => {
         }
 
         try {
-            // Dispatch to save the seat customers
             const seatCustomerPromises = seatsToBook.map(seat => dispatch(saveSeatsCustomer({ name: seat })));
             await Promise.all(seatCustomerPromises);
 
-            // Fetch the updated list of seats after booking
             await dispatch(getSeatsCustomers());
 
-            // Mark the seats as booked locally
             setSeats((prevSeats) => {
                 const updatedSeats = { ...prevSeats };
                 seatsToBook.forEach((seat) => {
@@ -90,7 +87,6 @@ const SeatsC = () => {
                 return updatedSeats;
             });
 
-            // Clear the selected seats input field
             setSelectedSeats('');
 
         } catch (error) {

@@ -65,7 +65,6 @@ const SeatsC = () => {
 
         const seatsToBook = selectedSeats.split(','); // Convert the selected seats string into an array
 
-        // Check if any of the seats are already booked
         for (const seat of seatsToBook) {
             if (seats[seat]) {
                 alert(`Seat ${seat} is already booked`);

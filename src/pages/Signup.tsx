@@ -5,6 +5,7 @@ import signupImage from '../assets/login.jpg';
 import { SignupModel } from "../models/SignupModel";
 import { signupUser } from "../reducers/SignupSlice";
 import { AppDispatch } from "../store/Store";
+import Swal from 'sweetalert2';
 
 function Signup() {
     const dispatch = useDispatch<AppDispatch>();
@@ -29,10 +30,18 @@ function Signup() {
 
     useEffect(() => {
         if (success) {
-            // Navigate to the login page when signup is successful
-            navigate('/');  // Redirect to the login page
+            Swal.fire({
+                title: 'Account Created!',
+                text: 'Your CineMax account has been successfully created. Please log in.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                navigate('/');
+            });
         }
-    }, [success, navigate]);  // Trigger when success changes
+    }, [success, navigate]);
+
 
     return (
         <div

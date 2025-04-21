@@ -5,6 +5,7 @@ import loginImage from '../assets/login.jpg';
 import { fetchUserRoleByEmail } from '../reducers/SignupSlice'; // Import the action
 import { useSelector } from 'react-redux'; // To get the current state
 import { RootState } from '../store/Store'; // Assuming RootState is the root state type
+import Swal from 'sweetalert2';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -21,15 +22,24 @@ function Login() {
     // Effect to handle navigation after role is updated
     useEffect(() => {
         if (!loading && role) {
-            if (role === 'User') {
-                navigate('/dashboard');
-            } else if (role === 'Customer') {
-                navigate('/dashboardc');
-            } else {
-                setError('Role not recognized. Please contact support.');
-            }
+            Swal.fire({
+                title: 'Login Successful!',
+                text: `Welcome to CineMax, ${role}`,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+            }).then(() => {
+                if (role === 'User') {
+                    navigate('/dashboard');
+                } else if (role === 'Customer') {
+                    navigate('/dashboardc');
+                } else {
+                    setError('Role not recognized. Please contact support.');
+                }
+            });
         }
-    }, [role, loading, navigate]); // This effect runs when `role` or `loading` changes
+    }, [role, loading, navigate]);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

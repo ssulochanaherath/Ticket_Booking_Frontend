@@ -8,7 +8,7 @@ const api = axios.create({
     baseURL: "http://localhost:3000/",
 });
 
-// ✅ Fetch all customers
+//Fetch all customers
 export const getCustomers = createAsyncThunk(
     "customer/getCustomers",
     async (_, { rejectWithValue }) => {
@@ -21,7 +21,7 @@ export const getCustomers = createAsyncThunk(
     }
 );
 
-// ✅ Add new customer and refresh list
+//Add new customer and refresh list
 export const saveCustomer = createAsyncThunk(
     "customer/saveCustomer",
     async (customer: CustomerModel, { dispatch, rejectWithValue }) => {
@@ -35,7 +35,7 @@ export const saveCustomer = createAsyncThunk(
     }
 );
 
-// ✅ Update customer and refresh list
+//Update customer and refresh list
 export const updatedCustomer = createAsyncThunk(
     "customer/updateCustomer",
     async ({ email, customer }: { email: string; customer: CustomerModel }, { dispatch, rejectWithValue }) => {
@@ -69,13 +69,13 @@ const CustomerSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // ✅ Fetch customers
+            //Fetch customers
             .addCase(getCustomers.fulfilled, (_, action) => action.payload)
             .addCase(getCustomers.rejected, (state, action) => {
                 console.error("Error fetching customers:", action.payload);
             })
 
-            // ✅ Save customer
+            //Save customer
             .addCase(saveCustomer.fulfilled, (state, action) => {
                 state.push(action.payload);
             })
@@ -83,7 +83,7 @@ const CustomerSlice = createSlice({
                 console.error("Error saving customer:", action.payload);
             })
 
-            // ✅ Update customer
+            //Update customer
             .addCase(updatedCustomer.fulfilled, (state, action) => {
                 const index = state.findIndex((c) => c.email === action.payload.email);
                 if (index >= 0) state[index] = action.payload;
@@ -92,7 +92,7 @@ const CustomerSlice = createSlice({
                 console.error("Error updating customer:", action.payload);
             })
 
-            // ✅ Delete customer
+            //Delete customer
             .addCase(deletedCustomer.fulfilled, (state, action) => {
                 return state.filter((customer) => customer.email !== action.payload);
             })

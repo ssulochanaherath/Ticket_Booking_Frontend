@@ -15,7 +15,7 @@ const api = axios.create({
     baseURL: 'http://localhost:3000',  // Ensure backend is running on this URL
 });
 
-// ✅ Async thunk for signup
+//Async thunk for signup
 export const signupUser = createAsyncThunk(
     'signup/signupUser',
     async (user: SignupModel, { rejectWithValue }) => {
@@ -66,21 +66,21 @@ const signupSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // ✅ Signup fulfilled (success)
+            //Signup fulfilled (success)
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = '';
                 state.success = true;  // Set success to true when signup is successful
                 console.log('Signup successful:', action.payload);
             })
-            // ✅ Signup rejected (failure)
+            //Signup rejected (failure)
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
                 state.success = false;  // Set success to false when signup fails
                 console.error('Signup failed:', action.payload);
             })
-            // ✅ Signup pending (loading)
+            //Signup pending (loading)
             .addCase(signupUser.pending, (state) => {
                 state.loading = true;
             })

@@ -7,6 +7,7 @@ import { getSeatsCustomers, saveSeatsCustomer, resetSeatsCustomers } from "../re
 import { RootState } from "../store/Store"; // Import your store's RootState
 import { FaFilm, FaTicketAlt, FaUser, FaCheckCircle } from "react-icons/fa";
 import NavbarC from "../components/NavbarC.tsx"; // Icons for step navigation
+import Swal from 'sweetalert2';
 
 const Tickets = () => {
     const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
@@ -123,8 +124,11 @@ const Tickets = () => {
 
         try {
             await dispatch(saveTickets(ticketData));
-            alert("Ticket added successfully!");
-
+            Swal.fire({
+                icon: 'success',
+                title: 'Ticket Booked Successfully',
+                text: 'Your ticket has been booked successfully. Thank you for choosing CineMax!',
+            })
             setSelectedMovie(null); // Reset the selected movie
             setSelectedSeats([]); // Clear the selected seats
             setCustomerEmail(""); // Clear the email field

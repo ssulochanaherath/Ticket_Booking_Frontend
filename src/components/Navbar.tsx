@@ -56,7 +56,7 @@ function Navbar() {
                         Films
                     </NavLink>
                     <NavLink to="/customer" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
-                        Customers
+                        Employees
                     </NavLink>
                     <NavLink to="/seats" className={({ isActive }) => isActive ? 'text-yellow-300' : 'text-white'}>
                         Seats
